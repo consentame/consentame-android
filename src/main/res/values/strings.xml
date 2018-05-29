@@ -1,0 +1,10 @@
+<resources>
+    <string name="consenta_btn_text">I acccept your terms &amp; conditions</string>
+    <string name="consenta_me_link">Consent Management by <a href="https://consenta.me">CONSENTA.ME</a></string>
+    <string name="tec_accept">I accept your Terms &amp; Conditions</string>
+    <string name="text_when_dropdown_toggle_closed">View More</string>
+    <string name="text_when_dropdown_toggle_open">Hide</string>
+    <string name="submit_consent_btn_text">Submit</string>
+    <string name="complete_version_link_text">complete version</string>
+    <string name="mandatory_check_text">MANDATORY  </string>
+</resources>

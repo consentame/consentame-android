@@ -1,0 +1,94 @@
+{
+  "data_controller": [
+    {
+      "version": 1,
+      "name": "Chino SRLS",
+      "contact": "Administrators",
+      "address": "via San Giovanni Bosco 23, Rovereto, Trento",
+      "email": "info@chino.io",
+      "VAT": "",
+      "on_behalf": false,
+      "privacy_policy": "",
+      "terms_and_conditions": ""
+    }
+  ],
+  "purposes": [
+    {
+      "data_processor": [
+        {
+          "version": 1,
+          "name": "Chino SRLS",
+          "contact": "Administrators",
+          "address": "via San Giovanni Bosco 23, Rovereto, Trento",
+          "email": "info@chino.io",
+          "VAT": "",
+          "on_behalf": false,
+          "privacy_policy": "",
+          "terms_and_conditions": ""
+        },
+        {
+          "version": 1,
+          "name": "Mailchimp INC",
+          "contact": "MailChimp Attn. Privacy Officer",
+          "address": "675 Ponce de Leon Ave NE, Suite 5000 Atlanta, GA 30308 USA",
+          "email": "privacy@mailchimp.com",
+          "VAT": "",
+          "on_behalf": false,
+          "privacy_policy": "",
+          "terms_and_conditions": ""
+        }
+      ],
+      "version": 1,
+      "description": "Chino.io service delivery and financial aspects",
+      "internal_id": "ml-service",
+      "long_description": "Storing the email and other personal data for mailing list purposes. The mailing list is related to the scope of Chino.io such as inform you regarding usage or other means . The email will not be shared, nor sell, to other services.\r\n\r\nThird party privacy policies: https://mailchimp.com/legal/privacy/",
+      "dataset": "email, name*, surname* (*when applicable)",
+      "mandatory": true
+    },
+    {
+      "data_processor": [
+        {
+          "version": 1,
+          "name": "Chino SRLS",
+          "contact": "Administrators",
+          "address": "via San Giovanni Bosco 23, Rovereto, Trento",
+          "email": "info@chino.io",
+          "VAT": "",
+          "on_behalf": false,
+          "privacy_policy": "",
+          "terms_and_conditions": ""
+        },
+        {
+          "version": 1,
+          "name": "Mailchimp INC",
+          "contact": "MailChimp Attn. Privacy Officer",
+          "address": "675 Ponce de Leon Ave NE, Suite 5000 Atlanta, GA 30308 USA",
+          "email": "privacy@mailchimp.com",
+          "VAT": "",
+          "on_behalf": false,
+          "privacy_policy": "",
+          "terms_and_conditions": ""
+        }
+      ],
+      "version": 1,
+      "description": "Chino.io marketing and offers updates",
+      "internal_id": "ml",
+      "long_description": "Storing the email and other personal data for mailing list purposes. The mailing list is related to commercial activities of Chino.io . The email will not be shared, nor sell, to other services.\r\n\r\nThird party privacy policies: https://mailchimp.com/legal/privacy/",
+      "dataset": "Email",
+      "mandatory": false
+    }
+  ],
+  "terms_and_condition": {
+    "version": 1,
+    "url": "https://chino.io/legal/terms-and-conditions",
+    "title": "Chino.io Terms and Conditions",
+    "mandatory": true
+  },
+  "version": 1,
+  "title": "Chino.io Privacy Policy and Terms and Conditions",
+  "text": "Chino.io collects personal data and act as data processor for the data that you store.",
+  "creation": "2018-02-16T16:21:41.092087Z",
+  "consent_id": "11111111-1111-1111-1111-111111111111",
+  "policy_url": "https://chino.io/legal/privacy-policy",
+  "website_domain": "https://console.test.chino.io"
+}

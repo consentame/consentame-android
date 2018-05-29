@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.ConsentaLoading" parent="Theme.AppCompat.Light">
+       <item name="colorControlActivated">@color/consenta_green</item>
+    </style>
+
+    <style name="Theme.ConsentaSwitch" parent="Theme.AppCompat.Light">
+        <!-- checked thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">@color/consenta_green</item>
+
+        <!-- Not checked thumb & track color (30% transparency) -->
+        <item name="colorSwitchThumbNormal">@color/consenta_grey</item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">@color/switch_grey</item>
+
+    </style>
+
+    <style name="Theme.ConsentaSwitchMandatory" parent="Theme.ConsentaSwitch">
+        <!-- Not checked thumb & track color (30% transparency) -->
+        <item name="colorSwitchThumbNormal">@color/main_light</item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">@color/consenta_grey</item>
+    </style>
+
+
+
+</resources>

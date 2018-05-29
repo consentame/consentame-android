@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="15dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp">
+
+    <TextView
+        android:id="@+id/dp_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Chino Srls"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_medium"
+        android:textColor="@color/main_dark"/>
+
+    <TextView
+        android:id="@+id/dp_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:layout_below="@+id/dp_name"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="address_line1"
+        android:textColor="@color/main_dark"
+        android:textSize="@dimen/text_small"/>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/email_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/text_big"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="5dp"
+        app:srcCompat="@drawable/ic_email"
+        android:layout_below="@+id/dp_address"
+
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/dp_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/dp_address"
+        android:layout_toRightOf="@+id/email_icon"
+        android:autoLink="email"
+        android:text="email"
+        android:textColor="@color/consenta_green"
+        android:textSize="@dimen/text_small" />
+
+</RelativeLayout>

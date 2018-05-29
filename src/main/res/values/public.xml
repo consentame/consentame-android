@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <public name="single_margin" type="integer"/>
+    <public name="double_margin" type="integer"/>
+    <!-- All other resources private -->
+</resources>

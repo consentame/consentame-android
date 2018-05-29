@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ConsentaMeCheckButton">
+        <!-- the ID of the Consent on https://consenta.me -->
+        <attr name="consentId" format="string" />
+
+        <!-- Set to 'true' when using development API -->
+        <attr name="dev" format="boolean" />
+    </declare-styleable>
+</resources>

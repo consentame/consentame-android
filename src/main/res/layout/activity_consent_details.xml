@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ConsentDetailsActivity">
+
+    <ScrollView
+        android:id="@+id/scroll_consent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:layout_marginLeft="@dimen/single_margin"
+            android:layout_marginRight="@dimen/single_margin"
+            android:layout_marginBottom="@dimen/double_margin">
+
+            <TextView
+                android:id="@+id/dp_box_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-smallcaps"
+                android:text="Data Administrators"
+                android:textAllCaps="true"
+                android:textColor="@color/consenta_grey"
+                android:textStyle="bold"
+                android:textSize="@dimen/consent_detail_section_header_text_size"/>
+
+            <LinearLayout
+                android:id="@+id/data_controllers_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/single_margin">
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/tec"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp">
+
+                <TextView
+                    android:id="@+id/tec_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:text="Terms and Conditions"
+                    android:textAllCaps="true"
+                    android:textColor="@color/consenta_grey"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/consent_detail_section_header_text_size"/>
+
+                <TextView
+                    android:id="@+id/tec_complete_link"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/tec_header"
+                    android:layout_marginStart="15dp"
+                    android:autoLink="web"
+                    android:text="@string/complete_version_link_text"
+                    android:textColor="@color/consenta_green" />
+
+                <LinearLayout
+                    android:id="@+id/tec_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="@dimen/single_margin"
+                    android:layout_below="@id/tec_header"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/policy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp">
+
+                <TextView
+                    android:id="@+id/policy_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:text="Privacy Policy"
+                    android:textAllCaps="true"
+                    android:textColor="@color/consenta_grey"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/consent_detail_section_header_text_size"/>
+
+                <TextView
+                    android:id="@+id/policy_complete_link"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/policy_header"
+                    android:layout_marginStart="15dp"
+                    android:autoLink="web"
+                    android:text="@string/complete_version_link_text"
+                    android:textColor="@color/consenta_green" />
+
+                <LinearLayout
+                    android:id="@+id/purposes_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="@dimen/single_margin"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/check_and_submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="@color/consenta_green"
+                android:text="@string/submit_consent_btn_text"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/consenta_me_link"
+                android:textColor="@color/main_dark"
+                android:textSize="10dp"
+                android:textStyle="bold" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                app:srcCompat="@drawable/consentame_logo" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

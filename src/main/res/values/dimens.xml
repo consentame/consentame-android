@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="single_margin">5dp</dimen>
+    <dimen name="text_small">14sp</dimen>
+    <dimen name="text_medium">17sp</dimen>
+    <dimen name="text_big">20sp</dimen>
+    <dimen name="box_right_margin">5dp</dimen>
+    <dimen name="consent_detail_section_header_text_size">17sp</dimen>
+    <dimen name="box_left_margin">5dp</dimen>
+    <dimen name="double_margin">10dp</dimen>
+</resources>

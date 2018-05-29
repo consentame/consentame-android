@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/consenta_me_check_btn"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/consenta_btn_bg"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="7dp"
+    android:paddingBottom="7dp"
+    tools:context=".ConsentaMeCheckButton" >
+
+    <ImageSwitcher
+        android:id="@+id/checkboxes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:layout_alignParentStart="true">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/checkbox_inactive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_square" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/checkbox_active"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_check_square" />
+
+    </ImageSwitcher>
+
+    <TextView
+        android:id="@+id/accept_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/checkboxes"
+        android:layout_margin="5dp"
+        android:layout_centerVertical="true"
+        android:text="@string/consenta_btn_text"
+        android:textColor="@color/consenta_grey" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="2dp"
+        android:layout_alignParentEnd="true"
+        app:srcCompat="@drawable/consentame_logo" />
+
+</RelativeLayout>

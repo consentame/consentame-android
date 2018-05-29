@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/double_margin"
+    android:theme="@style/Theme.ConsentaSwitch">
+
+    <RelativeLayout
+        android:id="@+id/alert_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/dpdialog_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Chino Srls"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_medium"
+            android:textColor="@color/main_dark"/>
+
+        <TextView
+            android:id="@+id/dpdialog_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_below="@+id/dpdialog_name"
+            android:text="A very, very, very, very, very, very, very, very, very, very, very, very, very long address_line1"
+            android:textColor="@color/main_dark"
+            android:textSize="@dimen/text_small"/>
+
+        <TextView
+            android:id="@+id/dpdialog_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/dpdialog_address"
+            android:layout_toRightOf="@+id/email_icon"
+            android:autoLink="email"
+            android:text="email"
+            android:textColor="@color/consenta_green"
+            android:textSize="@dimen/text_small" />
+
+    </RelativeLayout>
+
+</android.support.v4.widget.NestedScrollView>
