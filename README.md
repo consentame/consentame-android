@@ -1,7 +1,7 @@
 
 ![[consenta.me](https://consenta.me) logo](img/consentame_logo.png)
 
-# consenta-android
+# consenta-android [![](https://jitpack.io/v/consentame/consentame-android.svg)](https://jitpack.io/#consentame/consentame-android)
 **Android plugin for [consenta.me](https://consenta.me).** Created May 2018 by Andrea Arighi <[andrea@chino.io](mailto:andrea@chino.io)>
 
 Consenta.me is a [Chino.io](https://chino.io) product, created with all the experience on GDPR
@@ -19,25 +19,25 @@ and *Data Controllers* in an easy way. Once created, the Consent will be identif
 ### Install the Android library
 *Instructions below are for* ***Android Studio 3.x*** *and* ***Android Gradle plugin 3.*** *The minimum supported SDK version is* **API 22 (Android 5.1)**
 
-You can get the Consenta.me Android plugin via [jitpack](jitpack.io).
+You can get the Consenta.me Android plugin via [jitpack](jitpack.io): [![](https://jitpack.io/v/consentame/consentame-android.svg)](https://jitpack.io/#consentame/consentame-android)
 
 You need to edit your app's `build.gradle` file; add the maven repository URL:
 
 ```
 allprojects {
-		repositories {
-			// other repositories . . .
-			maven { url 'https://jitpack.io' }
-		}
+	repositories {
+		// other repositories . . .
+		maven { url 'https://jitpack.io' }
 	}
+}
 ```
 
 and the dependency:
 
 ```
 dependencies {
-    // other dependencies . . . 
-    implementation 'com.github.jitpack:android-example:1.0.1'
+	// other dependencies . . . 
+	implementation 'com.github.consentame:consentame-android:0.1'
 }
 ```
 
