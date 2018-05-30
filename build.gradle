@@ -1,11 +1,13 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
-group = 'com.github.aarighi'
+group = 'com.github.consentame'
 version = '1.0'
 
 android {
     compileSdkVersion 27
+    buildToolsVersion 27.0
+
     defaultConfig {
         minSdkVersion 22
         targetSdkVersion 27
@@ -22,10 +24,6 @@ android {
 }
 
 dependencies {
-//    test
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 //    JSON parser
     implementation ('com.fasterxml.jackson.core:jackson-core:2.9.5')
     implementation ('com.fasterxml.jackson.core:jackson-databind:2.9.5')
