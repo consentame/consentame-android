@@ -132,8 +132,8 @@ You can now insert the `ConsentaMeCheckButton` in your Activities:
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
   ```
-  You **may not** add `android:padding` (and paddingLeft/paddingTop/... variants), since it will break the button's layout.
-  You **may** add `android:layout_margin` though (as well as its variants like `layout_marginLeft`,`layout_marginTop`, etc..),
+  You **may not** add `android:padding` (and variants like `paddingLeft`,`paddingTop`, etc...), since it will break the button's layout.
+  You **may** add `android:layout_margin` though (as well as its variants, e.g. `layout_marginLeft`,`layout_marginTop`, etc..),
   as long as all of its elements (the checkbox, the text and the [consenta.me](https://consenta.me)
   logo) are clearly visible, like in the image below:
 
