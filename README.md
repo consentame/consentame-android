@@ -1,7 +1,7 @@
 
 ![[consenta.me](https://consenta.me) logo](img/consentame_logo.png)
 
-# consenta-android [![](https://jitpack.io/v/consentame/consentame-android.svg)](https://jitpack.io/#consentame/consentame-android)
+# consentame-android [![](https://jitpack.io/v/consentame/consentame-android.svg)](https://jitpack.io/#consentame/consentame-android)
 **Android plugin for [consenta.me](https://consenta.me).** Created May 2018 by Andrea Arighi <[andrea@chino.io](mailto:andrea@chino.io)>
 
 Consenta.me is a [Chino.io](https://chino.io) product, created with all the experience on GDPR
