@@ -45,10 +45,10 @@ dependencies {
 ### Insert Consent button
 You can now insert the `ConsentaMeCheckButton` in your Activities:
 
-1. Import the `http://schemas.android.com/apk/res-auto` namespace in the Activity's Layout:
+1. Import the `res-auto` namespace in the Activity's Layout:
 ```XML
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"                    <--
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/enclosing_layout">
@@ -66,10 +66,10 @@ You can now insert the `ConsentaMeCheckButton` in your Activities:
     . . . >
     <!-- Your content -->
 
-    <me.consenta.android.consentame.ConsentaMeCheckButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+    <me.consenta.android.consentame.ConsentaMeCheckButton                    <--
+            android:layout_width="match_parent"                              <--
+            android:layout_height="wrap_content"                             <--
+            />                                                               <--
 
     <!-- Your content -->
  </LinearLayout>
@@ -86,8 +86,8 @@ You can now insert the `ConsentaMeCheckButton` in your Activities:
     <me.consenta.android.consentame.ConsentaMeCheckButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:consentId="112a00df-1a14-2d04-3c0c-1078dbeb54a0"
-            />
+            app:consentId="112a00df-1a14-2d04-3c0c-1078dbeb54a0"/>           <--
+
 
     <!-- Your content -->
  </LinearLayout>
@@ -100,7 +100,7 @@ You can now insert the `ConsentaMeCheckButton` in your Activities:
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:consentId="112a00df-1a14-2d04-3c0c-1078dbeb54a0"
-            app:dev="true"/>
+            app:dev="true"/>                                                 <--
 ```
 
 5. Once the button is set, you can pass it to the class `ConsentaMe`, which provides a simple interface to get information about the status of the button.
@@ -111,30 +111,31 @@ You can now insert the `ConsentaMeCheckButton` in your Activities:
         with the approved Consent. This ID is called the **User Consent ID** and can be retrieved with this method.
         If the user has not approved the Consent, this will return `null`.
     * `public static String getCurrentConsentId()`, `public static boolean isCurrentChecked()` and `public static String getCurrentUserConsentId()`
-        works like the previous methods, but they get information from the **currently running instance** of the Consent button,
+        work like the previous methods, but they get information from the **currently running instance** of the Consent button,
         which exists as long as a User is reading the Consent's details.
     * Finally you can use `public static boolean isRunning()` to check whether there is an active instance.
 
-## Usage guidelines
+## Button usage guidelines
 
-* **You may not:**
+* **You may NOT:**
     * Have more than one screen with Consent details running at a time. The user must approve a Consent (or exit the details screen)
     before opening another Consent.
     * Insert Views inside the button's layout (even though the `ConsentaMeCheckButton` is a `Layout`).
     * Change the code of the library and/or the behaviour of any of its classes.
+    * Change the default `View.OnClickListener` and `onClick()` method of the button (trying to do so will result in an Exception)
 
 * **You may:**
     * Add more than one `ConsentaMeCheckButton` in the same app / activity (as long as the user can open only one of them at a time).
 
-* **Please do not alter the button's layout.** The required `android:layout` attributes should be set like in the example above, i.e.:
+* **Please do not alter the button's layout.** The mandatory `android:layout_width` and `android:layout_height` attributes should always be set to the following values:
   ```XML
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
   ```
-  You may **not** add `android:padding` (and paddingLeft/paddingTop/... variants), since it will break the button's layout.
-  You may add `android:layout_margin` though (as well as layout_marginLeft/layout_marginTop/... variants),
-  as long as all of its elements are visible. This includes the checkbox, the text and the [consenta.me](https://consenta.me)
-  logo, like in the image below:
+  You **may not** add `android:padding` (and paddingLeft/paddingTop/... variants), since it will break the button's layout.
+  You **may** add `android:layout_margin` though (as well as its variants like `layout_marginLeft`,`layout_marginTop`, etc..),
+  as long as all of its elements (the checkbox, the text and the [consenta.me](https://consenta.me)
+  logo) are clearly visible, like in the image below:
 
   ![(img/button_preview.png)](img/button_preview.png)
 
