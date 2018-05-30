@@ -9,6 +9,8 @@ and creation of health applications.
 
 ## How to use
 
+*We provide some sample code to show how the plugin is meant to be be used. Check it out: [consentame-android-example](https://github.com/consentame/consentame-android-example)*
+
 ### Create a Consent
 Consenta.me provides easy and GDPR/HIPAA-compliant consent tracking for web sites and apps.
 Subscribe to the newsletter on [consenta.me](https://consenta.me) in order to get early access to the service.
