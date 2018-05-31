@@ -61,15 +61,16 @@ Once the button is set, you can control it with the class `ConsentaMe`, which pr
 ConsentaMe consentaMe = new ConsentaMe(this, R.id.consentame_btn);
 ```
 Class `ConsentaMe` provides the following interface:
-    * `public String getConsentId()`: returns the Consent ID that was set in the `consentId` XML attribute during step 3.
-    * `public boolean isChecked()`: returns `true` if the user has approved the Consent.
-    * `public String getUserConsentId()`: when a user approves a Consent, a unique ID is generated that binds that user
-        with the approved Consent. This ID is called the **User Consent ID** and can be retrieved with this method.
-        If the user has not approved the Consent, this will return `null`.
-    * `public static String getCurrentConsentId()`, `public static boolean isCurrentChecked()` and `public static String getCurrentUserConsentId()`
-        work like the previous methods, but they get information from the **currently running instance** of the Consent button,
-        which exists as long as a User is reading the Consent's details.
-    * Finally you can use `public static boolean isRunning()` to check whether there is an active instance.
+
+* `public String getConsentId()`: returns the Consent ID that was set in the `consentId` XML attribute during step 3.
+* `public boolean isChecked()`: returns `true` if the user has approved the Consent.
+* `public String getUserConsentId()`: when a user approves a Consent, a unique ID is generated that binds that user
+with the approved Consent. This ID is called the **User Consent ID** and can be retrieved with this method.
+If the user has not approved the Consent, this will return `null`.
+* `public static String getCurrentConsentId()`, `public static boolean isCurrentChecked()` and `public static String getCurrentUserConsentId()`
+work like the previous methods, but they get information from the **currently running instance** of the Consent button,
+which exists as long as a User is reading the Consent's details.
+* Finally you can use `public static boolean isRunning()` to check whether there is an active instance.
 
 
 ***Note*** - remember to:
