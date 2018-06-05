@@ -65,7 +65,7 @@ Class `ConsentaMe` provides the following interface:
 * `public String getConsentId()`: returns the Consent ID that was set in the `consentId` XML attribute during step 3.
 * `public boolean isChecked()`: returns `true` if the user has approved the Consent.
 * `public String getUserConsentId()`: when a user approves a Consent, a unique ID is generated that binds that user
-with the approved Consent. This ID is called the **User Consent ID** and can be retrieved with this method.
+with the approved Consent. This ID is called the **User Consent ID** and it's needed to validate the user's consent on Consenta.me after the registration. It can be retrieved and used within your application with this method.
 If the user has not approved the Consent, this will return `null`.
 * `public static String getCurrentConsentId()`, `public static boolean isCurrentChecked()` and `public static String getCurrentUserConsentId()`
 work like the previous methods, but they get information from the **currently running instance** of the Consent button,
