@@ -56,9 +56,10 @@ You can now insert the `ConsentaMeCheckButton` in your Activities:
             app:dev="true"/>     
 ```
 
-Once the button is set, you can control it with the class `ConsentaMe`, which provides a simple interface to get information about the status of the button:
+Once the button is set, you can control it with the class `ConsentaMe`, which provides a simple interface to get information about the status of the button. You can use it to save the User Consent ID (see below) which you will use for the verification of the user's Consent:
 ```Java
 ConsentaMe consentaMe = new ConsentaMe(this, R.id.consentame_btn);
+String userConsentId = consentaMe.getUserConsentId();
 ```
 Class `ConsentaMe` provides the following interface:
 
