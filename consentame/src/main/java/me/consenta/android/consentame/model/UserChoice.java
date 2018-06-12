@@ -35,7 +35,7 @@ public class UserChoice {
      */
     public void ifSelectedAppendTo(List<Integer> idList) {
         if (choice.isChecked()) {
-            idList.add(new Integer(purposeId));
+            idList.add(purposeId);
         }
     }
 

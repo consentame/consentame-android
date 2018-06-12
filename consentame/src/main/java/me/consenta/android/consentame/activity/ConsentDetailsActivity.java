@@ -124,9 +124,11 @@ public class ConsentDetailsActivity extends AppCompatActivity {
                     current = thisConsentDetailsActivity;
                     startActivity(i);
                 } else {
+                    // focus on the non-acceptable choice and show that it's mandatory
                     unchecked.requestFocus();
                     scrollView.scrollTo(unchecked.getScrollX(), unchecked.getScrollY());
                     unchecked.setText(getResources().getString(R.string.mandatory_check_text));
+                    unchecked.setTextColor(getResources().getColor(R.color.error_red));
                     scrollView.invalidate();
                 }
             }
@@ -179,7 +181,7 @@ public class ConsentDetailsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View clickedView) {
                     // Hide "MANDATORY" text when clicked. Text is displayed by
-                    // setShowText(true), called inside OnClickListener of the "submit" button
+                    // setShowText(true), called inside OnClickListener of the submitBtn
                     if (clickedView == sel) {
                         sel.setText("");
                         sel.invalidate();
