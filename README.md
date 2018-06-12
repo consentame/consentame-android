@@ -1,13 +1,15 @@
 
 ![[consenta.me](https://consenta.me) logo](img/consentame_logo.png)
 
-# consenta-android [![](https://jitpack.io/v/consentame/consentame-android.svg)](https://jitpack.io/#consentame/consentame-android)
+# consentame-android [![](https://jitpack.io/v/consentame/consentame-android.svg)](https://jitpack.io/#consentame/consentame-android)
 **Android plugin for [consenta.me](https://consenta.me).** Created May 2018 by Andrea Arighi <[andrea@chino.io](mailto:andrea@chino.io)>
 
 Consenta.me is a [Chino.io](https://chino.io) product, created with all the experience on GDPR
 and creation of health applications.
 
 ## How to use
+
+*We provide some sample code to show how the plugin is meant to be be used. Check it out: [consentame-android-example](https://github.com/consentame/consentame-android-example)*
 
 ### Create a Consent
 Consenta.me provides easy and GDPR/HIPAA-compliant consent tracking for web sites and apps.
@@ -45,75 +47,40 @@ dependencies {
 ### Insert Consent button
 You can now insert the `ConsentaMeCheckButton` in your Activities:
 
-1. Import the `res-auto` namespace in the Activity's Layout:
 ```XML
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"                    <--
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/enclosing_layout">
-
-    <!-- Your content -->
-
- </LinearLayout>
-```
-
-2. Add the `ConsentaMeCheckButton` as if it were a normal View:
-```XML
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/enclosing_layout"
-    . . . >
-    <!-- Your content -->
-
-    <me.consenta.android.consentame.ConsentaMeCheckButton                    <--
-            android:layout_width="match_parent"                              <--
-            android:layout_height="wrap_content"                             <--
-            />                                                               <--
-
-    <!-- Your content -->
- </LinearLayout>
-```
-
-3. Add the attribute `consentId` and paste the ID of the Consent you created on Consenta.me:
-```XML
-<LinearLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        . . .>
-
-    <!-- Your content -->
-
-    <me.consenta.android.consentame.ConsentaMeCheckButton
+<me.consenta.android.consentame.ConsentaMeCheckButton
+            android:id="@+id/consentame_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:consentId="112a00df-1a14-2d04-3c0c-1078dbeb54a0"/>           <--
-
-
-    <!-- Your content -->
- </LinearLayout>
+            app:consentId="PASTE HERE your Consent ID"
+            app:dev="true"/>     
 ```
 
-4. While in development you can use developer API to test your app. You just have to set the attribute `dev` to `"true"`
-(Remember to remove the attribute before deploying):
-```XML
-    <me.consenta.android.consentame.ConsentaMeCheckButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:consentId="112a00df-1a14-2d04-3c0c-1078dbeb54a0"
-            app:dev="true"/>                                                 <--
+Once the button is set, you can control it with the class `ConsentaMe`, which provides a simple interface to get information about the status of the button. You can use it to save the User Consent ID (see below) which you will use for the verification of the user's Consent:
+```Java
+ConsentaMe consentaMe = new ConsentaMe(this, R.id.consentame_btn);
+String userConsentId = consentaMe.getUserConsentId();
 ```
+Class `ConsentaMe` provides the following interface:
 
-5. Once the button is set, you can pass it to the class `ConsentaMe`, which provides a simple interface to get information about the status of the button.
-    You can create one with
-    * `public String getConsentId()`: returns the Consent ID that was set in the `consentId` XML attribute during step 3.
-    * `public boolean isChecked()`: returns `true` if the user has approved the Consent.
-    * `public String getUserConsentId()`: when a user approves a Consent, a unique ID is generated that binds that user
-        with the approved Consent. This ID is called the **User Consent ID** and can be retrieved with this method.
-        If the user has not approved the Consent, this will return `null`.
-    * `public static String getCurrentConsentId()`, `public static boolean isCurrentChecked()` and `public static String getCurrentUserConsentId()`
-        work like the previous methods, but they get information from the **currently running instance** of the Consent button,
-        which exists as long as a User is reading the Consent's details.
-    * Finally you can use `public static boolean isRunning()` to check whether there is an active instance.
+* `public String getConsentId()`: returns the Consent ID that was set in the `consentId` XML attribute during step 3.
+* `public boolean isChecked()`: returns `true` if the user has approved the Consent.
+* `public String getUserConsentId()`: when a user approves a Consent, a unique ID is generated that binds that user
+with the approved Consent. This ID is called the **User Consent ID** and it's needed to validate the user's consent on Consenta.me after the registration. It can be retrieved and used within your application with this method.
+If the user has not approved the Consent, this will return `null`.
+* `public static String getCurrentConsentId()`, `public static boolean isCurrentChecked()` and `public static String getCurrentUserConsentId()`
+work like the previous methods, but they get information from the **currently running instance** of the Consent button,
+which exists as long as a User is reading the Consent's details.
+* Finally you can use `public static boolean isRunning()` to check whether there is an active instance.
+
+
+***Note*** - remember to:
+
+1. Import the `res-auto` namespace in the root Layout with `xmlns:app="http://schemas.android.com/apk/res-auto"`
+
+2. Paste the Consent ID of the Consent you created on Consenta.me in the attribute `consentId`. This can not be changed (every button must have exactly one Consent ID, but you can have more buttons)
+
+4. Right now only the develop API are supported, thus you should set the attribute `app:dev="true"` for the plugin to work.
 
 ## Button usage guidelines
 
