@@ -39,13 +39,17 @@ public class UIMapper {
 
     /**
      * Map a {@link List} of Consent element to the proper layout and
-     * appends it to the provided {@link ViewGroup container} in the UI
+     * <b>replaces</b> the content of the provided {@link ViewGroup container} in the UI.
+     *
      * @param sourceList a List of Consent elements, such as {@link DataController}
      * @param container the {@link ViewGroup} the new UI elements will be added to
      */
     public static void map(final List sourceList, final ViewGroup container) {
         if (CONSENTA_GREEN == 0)
             CONSENTA_GREEN = container.getResources().getColor(R.color.consenta_green);
+
+        container.removeAllViews();
+
         Object o = sourceList.get(0);
 
         if (o instanceof DataController) {
@@ -70,6 +74,7 @@ public class UIMapper {
     public static void map(final TermsAndConditions source, final ViewGroup container) {
         int layoutId = (source.isMandatory() ? R.layout.mandatory_terms_and_conditions_box : R.layout.terms_and_conditions_box);
 
+        // add action to link
         TextView link = container.findViewById(R.id.tec_complete_link);
         link.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +84,11 @@ public class UIMapper {
             }
         });
 
+        // get instance of the LinearLayout which contains the TeC
         LinearLayout tecContainer = container.findViewById(R.id.tec_container);
+        tecContainer.removeAllViews();
+        container.invalidate();
+
         RelativeLayout tecBox = (RelativeLayout) tecContainer.inflate(container.getContext(), layoutId, null);
         TextView desc = tecBox.findViewById(R.id.tec_desc);
         desc.setText(source.getTitle());
@@ -98,12 +107,14 @@ public class UIMapper {
         final Context context = container.getContext();
         final LayoutInflater inflater = LayoutInflater.from(context);
         for (final DataController source : sourceList) {
-            // map values from the consent to a new data_admin_box, then inject it in the container
+            // map values from the consent to a new data_controller_box, then inject it in the container
             final RelativeLayout dpBox = (RelativeLayout) map(source, inflater.inflate(R.layout.data_controller_box, null), dataProcessor);
 
             final String name = source.getName();
             final String email = source.getEmail();
             final String addr = source.getAddress();
+
+            // add onClick trigger to show/hide data processor's info
             dpBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -130,6 +141,7 @@ public class UIMapper {
                     d.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(CONSENTA_GREEN);
                 }
             });
+
             append(dpBox, container);
         }
     }
@@ -204,10 +216,11 @@ public class UIMapper {
     }
 
     /**
-     * Map the data of a {@link DataController} to a {@link View} that will be added to the UI by
-     * {@link #map(DataController, View)}
+     * Map the data of a {@link DataController} to a {@link View} that will then be added to the UI
+     *
      * @param source the {@link DataController} object to be mapped
      * @param view the {@link View} that will show the data on the UI
+     *
      * @return the View (for further elaboration)
      */
     private static View map(final DataController source, final View view, boolean dataProcessor) {
