@@ -3,6 +3,7 @@ package me.consenta.android.consentame;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.support.annotation.Keep;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import static me.consenta.android.consentame.utils.Constants.HOST;
 /**
  * Default Consenta.me checkbox
  */
+@Keep
 public final class ConsentaMeCheckButton extends LinearLayout {
 
     private String consentId;

@@ -1,12 +1,14 @@
 package me.consenta.android.consentame;
 
 import android.app.Activity;
+import android.support.annotation.Keep;
 import android.support.annotation.Nullable;
 import android.view.View;
 
 /**
  * This class provide some utility methods to interact with a {@link ConsentaMeCheckButton}
  */
+@Keep
 public final class ConsentaMe {
 
     private final ConsentaMeCheckButton button;
