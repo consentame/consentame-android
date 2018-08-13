@@ -5,7 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application>
-
+        <activity android:name=".activity.ConsentaMeActivity" />
+        <activity android:name=".activity.ConsentDetailsActivity" />
+        <activity android:name=".activity.SubmitConsentActivity" />
     </application>
 
 </manifest>
