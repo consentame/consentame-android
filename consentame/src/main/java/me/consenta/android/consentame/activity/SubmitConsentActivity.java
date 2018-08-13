@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import me.consenta.android.consentame.R;
@@ -69,8 +71,8 @@ public class SubmitConsentActivity extends AppCompatActivity {
         ConsentDetailsActivity.getCurrent().notifySuccess(this);
     }
 
-    public static Class<SubmitConsentActivity> initClass(List<UserChoice> userChoicesList) {
-        choices = userChoicesList;
+    public static Class<SubmitConsentActivity> initClass(Collection<UserChoice> userChoicesList) {
+        choices = new LinkedList<>(userChoicesList);
         return SubmitConsentActivity.class;
     }
 

@@ -1,14 +1,11 @@
 package me.consenta.android.consentame.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
-import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -19,7 +16,7 @@ import android.widget.TextView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.HashMap;
 
 import me.consenta.android.consentame.ConsentaMeCheckButton;
 import me.consenta.android.consentame.R;
@@ -31,8 +28,9 @@ import me.consenta.android.consentame.utils.UIMapper;
 public class ConsentDetailsActivity extends AppCompatActivity {
 
     private static Consent consent = null;
+    private boolean isMapped = false;
 
-    private static LinkedList<UserChoice> userChoices;
+    private static HashMap<String, UserChoice> userChoices;
 
     private static String exitMsg;
     private static boolean unreadErrors;
@@ -44,7 +42,7 @@ public class ConsentDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consent_details);
 
-        userChoices = new LinkedList<>();
+        userChoices = new HashMap<>();
 
         unreadErrors = false;
 
@@ -84,8 +82,14 @@ public class ConsentDetailsActivity extends AppCompatActivity {
      *  map Consent object to UI
      */
     private void mapToUI() {
+        if(isMapped) {
+            return;
+        } else {
+            isMapped = true;
+        }
+
         // Data Processors
-        LinearLayout dataControllersList = findViewById(R.id.data_controllers_list);
+         LinearLayout dataControllersList = findViewById(R.id.data_controllers_list);
         UIMapper.map(consent.getDataProcessors(), dataControllersList);
 
         // T&C
@@ -119,7 +123,7 @@ public class ConsentDetailsActivity extends AppCompatActivity {
                 SwitchCompat unchecked = parseUserChoices();
                 if (unchecked == null) {
                     // OK, send consent and call ConsentaMeCheckButton.check()
-                    Intent i = new Intent(v.getContext(), SubmitConsentActivity.initClass(userChoices));
+                    Intent i = new Intent(v.getContext(), SubmitConsentActivity.initClass(userChoices.values()));
                     i.putExtra("id", consent.getConsentId());
                     current = thisConsentDetailsActivity;
                     startActivity(i);
@@ -190,11 +194,11 @@ public class ConsentDetailsActivity extends AppCompatActivity {
             });
         }
 
-        userChoices.add(new UserChoice(sel, id, mandatory));
+        userChoices.put("" + id, new UserChoice(sel, id, mandatory));
     }
 
     public static SwitchCompat parseUserChoices() {
-        for (UserChoice choice : userChoices) {
+        for (UserChoice choice : userChoices.values()) {
             if (! choice.isAcceptable()) {
                 return choice.getSwitch();
             }
