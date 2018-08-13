@@ -17,7 +17,25 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            task javadoc(type: Javadoc) {
+                failOnError false
+                source = android.sourceSets.main.java.sourceFiles
+                classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+                classpath += configurations.compile
+            }
+
+// build a jar with javadoc
+            task javadocJar(type: Jar, dependsOn: javadoc) {
+                classifier = 'javadoc'
+                from javadoc.destinationDir
+            }
+
+            artifacts {
+                archives javadocJar
+            }
         }
+
         debug {
             minifyEnabled true
             useProguard false
@@ -39,21 +57,4 @@ dependencies {
     implementation "com.android.support:support-compat:27.1.1"
     implementation "com.android.support:appcompat-v7:27.1.1"
     implementation ('com.android.support.constraint:constraint-layout:1.1.0')
-}
-
-task javadoc(type: Javadoc) {
-    failOnError false
-    source = android.sourceSets.main.java.sourceFiles
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    classpath += configurations.compile
-}
-
-// build a jar with javadoc
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives javadocJar
 }
