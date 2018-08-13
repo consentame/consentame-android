@@ -15,6 +15,7 @@ public final class ConsentaMe {
 
     /**
      * Create a new instance of {@link ConsentaMe} linked to the specified {@link ConsentaMeCheckButton}
+     *
      * @param checkButton the button which will be linked to the new object
      *
      * @see ConsentaMe
@@ -25,6 +26,7 @@ public final class ConsentaMe {
 
     /**
      * Create a new instance of {@link ConsentaMe} linked to the specified {@link ConsentaMeCheckButton}
+     *
      * @param view a {@link View} that contains the target {@link ConsentaMeCheckButton}
      * @param checkButtonResId the resource id of a {@link ConsentaMeCheckButton}
      *
@@ -36,6 +38,7 @@ public final class ConsentaMe {
 
     /**
      * Create a new instance of {@link ConsentaMe} linked to the specified {@link ConsentaMeCheckButton}
+     *
      * @param activity an {@link Activity} that contains the target {@link ConsentaMeCheckButton}
      * @param checkButtonResId the resource id of a {@link ConsentaMeCheckButton}
      *
@@ -47,6 +50,7 @@ public final class ConsentaMe {
 
     /**
      * Get the Consent ID of the linked {@link ConsentaMeCheckButton}
+     *
      * @return a {@link String} containing the Consent ID
      */
     public String getConsentId() {
@@ -55,6 +59,7 @@ public final class ConsentaMe {
 
     /**
      * Get the User Consent ID of the linked {@link ConsentaMeCheckButton}
+     *
      * @return a {@link String} containing the User Consent ID. If the button was not checked,
      *      this will return {@code null}
      *
@@ -79,6 +84,7 @@ public final class ConsentaMe {
 
     /**
      * Get the Consent ID of the currently running instance of {@link ConsentaMeCheckButton}
+     *
      * @return a {@link String} containing the Consent ID or {@code null} if no instance is running.
      */
     @Nullable
@@ -91,8 +97,10 @@ public final class ConsentaMe {
 
     /**
      * Get the User Consent ID of the currently running instance of {@link ConsentaMeCheckButton}
+     *
      * @return a {@link String} containing the User Consent ID or {@code null} if no instance is running.
      */
+    @Nullable
     public static String getCurrentUserConsentId() {
         if (!isRunning())
             return null;
@@ -103,6 +111,7 @@ public final class ConsentaMe {
     /**
      * Check whether the currently running instance of {@link ConsentaMeCheckButton}
      * has already been checked by the user.
+     *
      * @return {@code true} if the button has been checked, {@code false} if not, or if
      * there is no currently running instance.
      *
@@ -115,6 +124,7 @@ public final class ConsentaMe {
     /**
      * Check whether there is a currently running instance of {@link ConsentaMeCheckButton},
      * which prevents other buttons to be clicked on.
+     *
      * @return {@code true} if there is an instance of {@link ConsentaMeCheckButton running},
      *      {@code false} otherwise.
      */
