@@ -1,1 +1,1 @@
-include ':consentame'
+include ':consentame', ":example"
