@@ -27,7 +27,10 @@ import static me.consenta.android.consentame.utils.Constants.DEMO;
 import static me.consenta.android.consentame.utils.Constants.DEV;
 
 /**
- * Performs calls to Consenta.me to retrieve a Consent data
+ * Performs calls to Consenta.me to retrieve a Consent object.
+ * Automatically switches to {@link ConsentDetailsActivity} once the
+ * data have been downloaded.
+ *
  */
 public final class ConsentaMeActivity extends AppCompatActivity {
 
