@@ -10,10 +10,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import java.io.IOException;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -164,14 +166,13 @@ public final class ConsentaMeActivity extends AppCompatActivity {
                 return data;
             }
 
-            String fetchConsentUrl = Constants.HOST + "/" + consentId;
-            // https://dev.consenta.me/api/userconsent/USER_CONSENT_ID/check/
+            String fetchConsent = Constants.HOST + "/" + consentId;
 
             // API call to Consenta.me to fetch consent details
             try {
                 Request readConsent = new Request.Builder()
                         .get()
-                        .url(fetchConsentUrl)
+                        .url(fetchConsent)
                         .build();
                 Response resp = httpClient.newCall(readConsent).execute();
 
@@ -179,6 +180,8 @@ public final class ConsentaMeActivity extends AppCompatActivity {
                 data.put("consent", resp.body().string());
 
                 if (ucID != null) {
+                    // Fetch consent
+                    // https://dev.consenta.me/api/userconsent/USER_CONSENT_ID/check/
                     String fetchAcceptedPurposes = Constants.HOST + "/api/userconsent/" + ucID + "/check";
 
                     Request readPurposes = new Request.Builder()
@@ -189,9 +192,8 @@ public final class ConsentaMeActivity extends AppCompatActivity {
 
 
                     // return JSON string
-                    data.put("accepted_purposes", resp.body().string());
+                    data.put("purposes", resp.body().string());
                 }
-
             } catch (IOException e) {
                 // return client's error message
                 if (DEV)
@@ -208,9 +210,9 @@ public final class ConsentaMeActivity extends AppCompatActivity {
 
             success = !(returnValues.containsKey("error"));
 
+            ObjectMapper mapper = new ObjectMapper();
             try {
                 // try to map AsyncTask's result on a 'Consent' object
-                ObjectMapper mapper = new ObjectMapper();
                 mapper.readValue(
                         returnValues.get("consent"),
                         Consent.class
@@ -221,11 +223,26 @@ public final class ConsentaMeActivity extends AppCompatActivity {
                 returnValues.put("error", e.getMessage());
             }
 
+            String[] purposes = null;
+            if (returnValues.containsKey("purposes")) {
+                try {
+                    purposes = mapper.readValue(
+                            returnValues.get("purposes"),
+                            TypeFactory.defaultInstance().constructArrayType(String.class)
+                    );
+                } catch (IOException e) {
+                    // failed to map - not a valid JSON array
+                    success = false;
+                    returnValues.put("error", e.getMessage());
+                }
+            }
+
             if (success) {
                 // show Consent details
                 setConsoleText(null, false);
                 Intent intent = new Intent(ConsentaMeActivity.this, ConsentDetailsActivity.class);
                 intent.putExtra("consent-json", returnValues.get("consent"));
+                intent.putExtra("purposes", purposes);
 
                 notifySuccess(); // finish ConsentaMeActivity
                 startActivity(intent); // start ConsentDetailsActivity

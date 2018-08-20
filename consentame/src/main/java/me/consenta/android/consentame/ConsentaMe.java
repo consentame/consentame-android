@@ -70,8 +70,36 @@ public final class ConsentaMe {
         return button.getUserConsentId();
     }
 
-    public void setUserConsentId(String userConsentId) {
+    /**
+     *
+     *
+     */
+    public void setUpdateParameters() {
+
+    }
+
+    /**
+     * Set the value of the User Consent ID to be shown / updated when user
+     * clicks on this button
+     *
+     * @param userConsentId the user consent ID of an existing Consent. This ID is returned after
+     *                      creation of a new Consent
+     */
+    // TODO remove
+    public void showConsentOnClick(String userConsentId) {
         button.setButtonChecked(userConsentId);
+    }
+
+    /**
+     * Store the access token that will be used for updating the Consent.
+     *
+     * @param accessToken the access token that is needed to update a Consent.<br>
+     *                    Tokens can be requested to Consenta.me API by the app's backend,
+     *                    which will then send them to the app and saved using this method.
+     */
+    // TODO remove
+    public void setUpdateToken(String accessToken) {
+        button.setAccessToken(accessToken);
     }
 
     /**

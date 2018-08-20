@@ -25,11 +25,15 @@ import static me.consenta.android.consentame.utils.Constants.HOST;
 @Keep
 public final class ConsentaMeCheckButton extends LinearLayout {
 
+    // base attributes
+    private static ConsentaMeCheckButton currentButton = null;
     private String consentId;
     private boolean checked;
-    private String userConsentId;
 
-    private static ConsentaMeCheckButton currentButton = null;
+    // update operation
+    private String userConsentId;
+    private String updateAccessToken = null;
+
 
     public ConsentaMeCheckButton(final Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -59,7 +63,7 @@ public final class ConsentaMeCheckButton extends LinearLayout {
     }
 
     /**
-     * Change the Button's current state to 'checked'
+     * Change the state of the currently running instance of the Button to 'checked'
      */
     public static void setCurrentButtonChecked(String userConsentId) {
         ImageSwitcher checkBoxImg = currentButton.findViewById(R.id.checkboxes);
@@ -69,13 +73,24 @@ public final class ConsentaMeCheckButton extends LinearLayout {
     }
 
     /**
-     * Change the Button's current state to 'checked'
+     * Change the Button's state to 'checked'
      */
     void setButtonChecked(String userConsentId) {
         ImageSwitcher checkBoxImg = this.findViewById(R.id.checkboxes);
         checkBoxImg.setImageResource(R.drawable.ic_check_square);
         this.userConsentId = userConsentId;
         this.checked = true;
+    }
+
+    /**
+     * Store the access token that will be used for updating the Consent.
+     *
+     * @param token the access token that is needed to update a Consent. Tokens are provided to
+     *              the application's backend by Consenta.me API and will then be sent
+     *              to the app by the backend.
+     */
+    void setAccessToken(String token) {
+        updateAccessToken = token;
     }
 
     /**
@@ -161,6 +176,7 @@ public final class ConsentaMeCheckButton extends LinearLayout {
             // if 'null', the ConsentaMeActivity will create a new consent,
             // otherwise the old one will be fetched and updated.
             intent.putExtra("user_consent_id", btnHandler.getUserConsentId());
+            intent.putExtra("consenbt_update_token", updateAccessToken);
             currentButton = thisBtn;
             context.startActivity(intent);
         }
