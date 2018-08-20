@@ -16,11 +16,14 @@ import android.widget.TextView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import me.consenta.android.consentame.ConsentaMeCheckButton;
 import me.consenta.android.consentame.R;
 import me.consenta.android.consentame.model.Consent;
+import me.consenta.android.consentame.model.Purpose;
 import me.consenta.android.consentame.model.UserChoice;
 import me.consenta.android.consentame.utils.Constants;
 import me.consenta.android.consentame.utils.UIMapper;
@@ -54,6 +57,9 @@ public class ConsentDetailsActivity extends AppCompatActivity {
 
         ObjectMapper mapper = new ObjectMapper();
         String consentJson = caller.getStringExtra("consent-json");
+        LinkedList<String> acceptedPurposes = getPurposes(
+                caller.getStringArrayExtra("purposes")
+        );
 
         if (consentJson == null || consentJson.isEmpty()) {
             setErrorMessage("no Consent fetched (null)");
@@ -63,6 +69,14 @@ public class ConsentDetailsActivity extends AppCompatActivity {
         try {
             // try to write data to a Consent object
             consent = mapper.readValue(consentJson, Consent.class);
+
+            if (acceptedPurposes != null) {
+                for (Purpose p : consent.getPurposes()) {
+                    if (acceptedPurposes.contains(p.getInternalId())) {
+                        p.getAdditionalProperties().put("accepted", true);
+                    }
+                }
+            }
         } catch (IOException e) {
             String err;
             // unknown error
@@ -72,10 +86,21 @@ public class ConsentDetailsActivity extends AppCompatActivity {
                 err = "Consent not found. Please contact the app developer.";
             }
 
-            exitMsg = err;
+            // don't call 'setErrorMessage()'! 'err' might be null, but in this case an error must
+            // always be displayed.
             unreadErrors = true;
+            exitMsg = err;
             finish();
         }
+    }
+
+    private LinkedList<String> getPurposes(String[] purposes) {
+        if (purposes == null) {
+            return null;
+        }
+        return new LinkedList<>(
+                Arrays.asList(purposes)
+        );
     }
 
     /**
@@ -178,8 +203,10 @@ public class ConsentDetailsActivity extends AppCompatActivity {
         }
     }
 
-    public static void addChoice(View v, int id, boolean mandatory) {
+    public static void addChoice(View v, int id, boolean mandatory, boolean selected) {
         final SwitchCompat sel = v.findViewById(R.id.selector);
+        sel.setChecked(selected);
+
         if (mandatory) {
             sel.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -195,6 +222,10 @@ public class ConsentDetailsActivity extends AppCompatActivity {
         }
 
         userChoices.put("" + id, new UserChoice(sel, id, mandatory));
+    }
+
+    public static void addChoice(View v, int id, boolean mandatory) {
+        addChoice(v, id, mandatory, false);
     }
 
     public static SwitchCompat parseUserChoices() {

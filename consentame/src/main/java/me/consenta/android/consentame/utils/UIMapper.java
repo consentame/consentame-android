@@ -14,8 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import me.consenta.android.consentame.R;
 import me.consenta.android.consentame.activity.ConsentDetailsActivity;
@@ -93,6 +95,7 @@ public class UIMapper {
         TextView desc = tecBox.findViewById(R.id.tec_desc);
         desc.setText(source.getTitle());
 
+        // TODO map accepted TeC when updating consent
         ConsentDetailsActivity.addChoice(tecBox, TermsAndConditions.ID, source.isMandatory());
         append(tecBox, container);
     }
@@ -205,7 +208,11 @@ public class UIMapper {
                 )
         );
 
-        ConsentDetailsActivity.addChoice(view, source.getId(), source.isMandatory());
+        // look for information about the accepted status of this Purpose
+        Map p = source.getAdditionalProperties();
+        boolean isChecked = p.containsKey("accepted") && (boolean) p.get("accepted");
+
+        ConsentDetailsActivity.addChoice(view, source.getId(), source.isMandatory(), isChecked);
 
         // long DATA CONTROLLERS
         LinearLayout dcContainer = dropDown.findViewById(R.id.p_data_controllers_full);

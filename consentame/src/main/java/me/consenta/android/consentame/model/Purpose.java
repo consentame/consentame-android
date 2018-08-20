@@ -45,6 +45,7 @@ public class Purpose implements Serializable
     private String dataset;
     @JsonProperty("mandatory")
     private boolean mandatory;
+
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
 
