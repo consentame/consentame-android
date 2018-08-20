@@ -13,7 +13,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.ConcurrentModificationException;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 import me.consenta.android.consentame.ConsentaMeCheckButton;
 import me.consenta.android.consentame.R;
@@ -40,7 +42,8 @@ public final class ConsentaMeActivity extends AppCompatActivity {
 
     static int ERR_COLOR, MSG_COLOR;
 
-    private String consentId = null;
+    private String consentId = null,
+                    userConsentId = null;
 
     public static Class<ConsentaMeActivity> setUpClass() {
         if (ConsentaMeCheckButton.getCurrentInstance() != null) {
@@ -62,6 +65,9 @@ public final class ConsentaMeActivity extends AppCompatActivity {
         loading = findViewById(R.id.progressBar);
         retry = findViewById(R.id.retry_button);
 
+        consentId = getIntent().getStringExtra("id");
+        userConsentId = getIntent().getStringExtra("user_consent_id");
+
         final ConsentaMeActivity thisConsentaMeActivity = this;
         retry.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,16 +75,14 @@ public final class ConsentaMeActivity extends AppCompatActivity {
                 if (DEMO)
                     new DemoFetchConsentTask(thisConsentaMeActivity).execute();
                 else
-                    new FetchConsentTask().execute(consentId);
+                    new FetchConsentTask().execute(consentId, userConsentId);
             }
         });
-
-        consentId = getIntent().getStringExtra("id");
 
         if (DEMO)
             new DemoFetchConsentTask(this).execute();
         else
-            new FetchConsentTask().execute(consentId);
+            new FetchConsentTask().execute(consentId, userConsentId);
 
         String error = ConsentDetailsActivity.readErrorMessage();
 
@@ -128,10 +132,11 @@ public final class ConsentaMeActivity extends AppCompatActivity {
      * {@link AsyncTask} implementation that fetches a consent from
      * <a href="https://consenta.me">Consenta.me</a>
      */
-    private final class FetchConsentTask extends AsyncTask<String, Void, String> {
+    private final class FetchConsentTask extends AsyncTask<String, Void, HashMap<String, String>> {
 
         private boolean success;
         private OkHttpClient httpClient;
+
 
         FetchConsentTask() {
             httpClient = new OkHttpClient.Builder()
@@ -149,63 +154,89 @@ public final class ConsentaMeActivity extends AppCompatActivity {
         }
 
         @Override
-        protected String doInBackground(String... strings) {
+        protected HashMap<String, String> doInBackground(String... strings) {
+            HashMap<String, String> data = new HashMap<>();
 
             String consentId = strings[0];
+            String ucID = strings[1];
 
             if (DEMO) {
-                return "";
+                return data;
             }
+
+            String fetchConsentUrl = Constants.HOST + "/" + consentId;
+            // https://dev.consenta.me/api/userconsent/USER_CONSENT_ID/check/
 
             // API call to Consenta.me to fetch consent details
             try {
                 Request readConsent = new Request.Builder()
-                        .url(Constants.HOST + "/" + consentId)
+                        .get()
+                        .url(fetchConsentUrl)
                         .build();
                 Response resp = httpClient.newCall(readConsent).execute();
 
                 // return JSON string
-                return resp.body().string();
+                data.put("consent", resp.body().string());
+
+                if (ucID != null) {
+                    String fetchAcceptedPurposes = Constants.HOST + "/api/userconsent/" + ucID + "/check";
+
+                    Request readPurposes = new Request.Builder()
+                            .get()
+                            .url(fetchAcceptedPurposes)
+                            .build();
+                    resp = httpClient.newCall(readPurposes).execute();
+
+
+                    // return JSON string
+                    data.put("accepted_purposes", resp.body().string());
+                }
 
             } catch (IOException e) {
                 // return client's error message
                 if (DEV)
                     e.printStackTrace();
-                return e.getMessage();
+                data.put("error", e.getMessage());
             }
+
+            return data;
         }
 
         @Override
-        protected void onPostExecute(String jsonResponse) {
+        protected void onPostExecute(HashMap<String, String> returnValues) {
             loading.setVisibility(View.GONE);
+
+            success = !(returnValues.containsKey("error"));
 
             try {
                 // try to map AsyncTask's result on a 'Consent' object
                 ObjectMapper mapper = new ObjectMapper();
                 mapper.readValue(
-                        jsonResponse,
+                        returnValues.get("consent"),
                         Consent.class
                 );
-                success = true;
             } catch (IOException e) {
                 // failed to map - not a Consent
                 success = false;
+                returnValues.put("error", e.getMessage());
             }
 
             if (success) {
                 // show Consent details
                 setConsoleText(null, false);
                 Intent intent = new Intent(ConsentaMeActivity.this, ConsentDetailsActivity.class);
-                intent.putExtra("consent-json", jsonResponse);
+                intent.putExtra("consent-json", returnValues.get("consent"));
 
                 notifySuccess(); // finish ConsentaMeActivity
                 startActivity(intent); // start ConsentDetailsActivity
             } else {
                 // show error message
+                String err = returnValues.get("error");
                 if (DEV)
-                    setConsoleText(jsonResponse, true);
+                    setConsoleText(err, true);
                 else {
                     setConsoleText("There is an error in the application. \nPlease contact the developer.", true);
+                    Logger.getLogger(this.getClass().getCanonicalName()).severe(err);
                 }
 
                 retry.setVisibility(View.VISIBLE);

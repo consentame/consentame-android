@@ -70,6 +70,10 @@ public final class ConsentaMe {
         return button.getUserConsentId();
     }
 
+    public void setUserConsentId(String userConsentId) {
+        button.setButtonChecked(userConsentId);
+    }
+
     /**
      * Check if the linked {@link ConsentaMeCheckButton} has already been checked by the user.<br>
      * <br>

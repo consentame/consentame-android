@@ -33,6 +33,7 @@ public final class ConsentaMeCheckButton extends LinearLayout {
 
     public ConsentaMeCheckButton(final Context context, AttributeSet attrs) {
         super(context, attrs);
+
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
                 R.styleable.ConsentaMeCheckButton,
@@ -45,28 +46,7 @@ public final class ConsentaMeCheckButton extends LinearLayout {
 
             Logger.getLogger(getClass().getSimpleName()).info("correctly set consentId");
 
-            final ConsentaMeCheckButton thisBtn = this;
-
-            super.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Intent intent;
-                    if (!checked) {
-                        intent = new Intent(context, ConsentaMeActivity.setUpClass());
-                        intent.putExtra("id", consentId);
-
-                        currentButton = thisBtn;
-
-                        context.startActivity(intent);
-                    }
-//                    TODO (backlog): update consent and move context.startActivity() to the bottom
-//                    else {
-//                       // update consent
-//                    }
-//                    context.startActivity(intent);
-                }
-            });
+            super.setOnClickListener(new ConsentaMeOnClickListener(context, this));
         } finally {
             a.recycle();
         }
@@ -86,6 +66,16 @@ public final class ConsentaMeCheckButton extends LinearLayout {
         checkBoxImg.setImageResource(R.drawable.ic_check_square);
         currentButton.userConsentId = userConsentId;
         currentButton.checked = true;
+    }
+
+    /**
+     * Change the Button's current state to 'checked'
+     */
+    void setButtonChecked(String userConsentId) {
+        ImageSwitcher checkBoxImg = this.findViewById(R.id.checkboxes);
+        checkBoxImg.setImageResource(R.drawable.ic_check_square);
+        this.userConsentId = userConsentId;
+        this.checked = true;
     }
 
     /**
@@ -146,5 +136,33 @@ public final class ConsentaMeCheckButton extends LinearLayout {
     @Nullable
     String getUserConsentId() {
         return userConsentId;
+    }
+
+    /**
+     * {@link android.view.View.OnClickListener} implementation that handles the click actions on
+     * the {@link ConsentaMeCheckButton}.
+     */
+    public final class ConsentaMeOnClickListener implements View.OnClickListener {
+
+        private Context context;
+        private ConsentaMeCheckButton thisBtn;
+        private ConsentaMe btnHandler;
+
+        public ConsentaMeOnClickListener(final Context appContext, final ConsentaMeCheckButton button) {
+            context = appContext;
+            thisBtn = button;
+            btnHandler = new ConsentaMe(thisBtn);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(context, ConsentaMeActivity.setUpClass());
+            intent.putExtra("id", btnHandler.getConsentId());
+            // if 'null', the ConsentaMeActivity will create a new consent,
+            // otherwise the old one will be fetched and updated.
+            intent.putExtra("user_consent_id", btnHandler.getUserConsentId());
+            currentButton = thisBtn;
+            context.startActivity(intent);
+        }
     }
 }
