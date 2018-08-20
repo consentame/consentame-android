@@ -18,7 +18,6 @@ public class SubmitSuccessResponse implements Serializable
 
     @JsonProperty("user_consent_id")
     private String userConsentId;
-    private final static long serialVersionUID = -4231491057136415192L;
 
     /**
      * No args constructor for use in serialization

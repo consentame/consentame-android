@@ -19,7 +19,6 @@ public class SubmitErrorResponse implements Serializable
     private String error;
     @JsonProperty("code")
     private List<Integer> code = null;
-    private final static long serialVersionUID = -2064843755389305167L;
 
     /**
      * No args constructor for use in serialization

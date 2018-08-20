@@ -1,6 +1,7 @@
 
 package me.consenta.android.consentame.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -28,9 +29,10 @@ public class TermsAndConditions implements Serializable
     @JsonProperty("mandatory")
     private boolean mandatory;
 
-    public static final int ID = -1;
+    @JsonIgnore
+    private boolean checked;
 
-    private final static long serialVersionUID = -5558217988778676762L;
+    public static final int ID = -1;
 
     /**
      * No args constructor for use in serialization

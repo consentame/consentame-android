@@ -52,8 +52,7 @@ public class Consent implements Serializable
     @JsonProperty("website_domain")
     private String websiteDomain;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-    private final static long serialVersionUID = 324402938814626015L;
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     /**
      * No args constructor for use in serialization

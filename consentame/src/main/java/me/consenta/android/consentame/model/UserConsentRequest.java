@@ -32,8 +32,6 @@ public class UserConsentRequest implements Serializable
     @JsonIgnore
     private String consentId;
 
-    private final static long serialVersionUID = -2886769225057096028L;
-
     /**
      * No args constructor for use in serialization
      *
@@ -72,12 +70,10 @@ public class UserConsentRequest implements Serializable
         RequestBody body = RequestBody.create(json, mapper.writeValueAsString(this));
 
 
-        Request r = new Request.Builder()
+        return new Request.Builder()
                 .url(Constants.HOST + "/" + consentId + "/")
                 .post(body)
                 .build();
-
-        return r;
     }
 
     @JsonProperty("tec")

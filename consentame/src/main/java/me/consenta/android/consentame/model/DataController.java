@@ -43,8 +43,6 @@ public class DataController implements Serializable
     @JsonProperty("terms_and_conditions")
     private String termsAndConditions;
 
-    private final static long serialVersionUID = 6397837644252632483L;
-
     /**
      * No args constructor for use in serialization
      * 

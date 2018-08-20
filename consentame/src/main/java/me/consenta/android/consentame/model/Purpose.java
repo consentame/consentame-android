@@ -46,8 +46,7 @@ public class Purpose implements Serializable
     @JsonProperty("mandatory")
     private boolean mandatory;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-    private final static long serialVersionUID = -1714245501197493152L;
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     /**
      * No args constructor for use in serialization
