@@ -129,7 +129,7 @@
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
                 android:backgroundTint="@color/consenta_green"
-                android:text="@string/submit_consent_btn_text"
+                android:text="@string/consent_submit_btn_text"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textStyle="bold" />

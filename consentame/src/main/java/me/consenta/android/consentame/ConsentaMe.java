@@ -71,35 +71,30 @@ public final class ConsentaMe {
     }
 
     /**
+     * Set the button to checked and bind it to a specific User Consent ID.
+     * Also set a new temporary access token for review / update operations on that Consent.
      *
-     *
+     * @param temporaryToken the token that can be used to fetch / update the consent.
+     *                       It must be requested to the app's backend, which can obtain one with
+     *                       an API call to Consenta.me
+     * @param userConsentId
      */
-    public void setUpdateParameters() {
-
+    public void init(String temporaryToken, String userConsentId) {
+        if (userConsentId != null) {
+            button.setButtonChecked(userConsentId);
+        }
+        button.setAccessToken(temporaryToken);
     }
 
     /**
-     * Set the value of the User Consent ID to be shown / updated when user
-     * clicks on this button
+     * Set a new temporary access token for review / update operations.
      *
-     * @param userConsentId the user consent ID of an existing Consent. This ID is returned after
-     *                      creation of a new Consent
+     * @param temporaryToken the token that can be used to fetch / update the consent.
+     *                       It must be requested to the app's backend, which can obtain one with
+     *                       an API call to Consenta.me
      */
-    // TODO remove
-    public void showConsentOnClick(String userConsentId) {
-        button.setButtonChecked(userConsentId);
-    }
-
-    /**
-     * Store the access token that will be used for updating the Consent.
-     *
-     * @param accessToken the access token that is needed to update a Consent.<br>
-     *                    Tokens can be requested to Consenta.me API by the app's backend,
-     *                    which will then send them to the app and saved using this method.
-     */
-    // TODO remove
-    public void setUpdateToken(String accessToken) {
-        button.setAccessToken(accessToken);
+    public void init(String temporaryToken) {
+        init(temporaryToken, null);
     }
 
     /**
@@ -118,6 +113,8 @@ public final class ConsentaMe {
      * Get the Consent ID of the currently running instance of {@link ConsentaMeCheckButton}
      *
      * @return a {@link String} containing the Consent ID or {@code null} if no instance is running.
+     *
+     * @see #isRunning()
      */
     @Nullable
     public static String getCurrentConsentId() {
@@ -131,6 +128,8 @@ public final class ConsentaMe {
      * Get the User Consent ID of the currently running instance of {@link ConsentaMeCheckButton}
      *
      * @return a {@link String} containing the User Consent ID or {@code null} if no instance is running.
+     *
+     * @see #isRunning()
      */
     @Nullable
     public static String getCurrentUserConsentId() {

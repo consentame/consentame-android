@@ -18,7 +18,6 @@ import me.consenta.android.consentame.model.SubmitSuccessResponse;
 import me.consenta.android.consentame.model.UserChoice;
 import me.consenta.android.consentame.model.UserConsentRequest;
 import okhttp3.OkHttpClient;
-import okhttp3.Response;
 
 import static me.consenta.android.consentame.utils.Constants.DEV;
 
@@ -52,7 +51,6 @@ class SubmitConsentTask extends AsyncTask<Void, Void, Boolean> {
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .build();
 
-        Response res;
         String resContent;
         try {
             // HTTP call to Consenta.me API

@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -95,8 +94,7 @@ public class UIMapper {
         TextView desc = tecBox.findViewById(R.id.tec_desc);
         desc.setText(source.getTitle());
 
-        // TODO map accepted TeC when updating consent
-        ConsentDetailsActivity.addChoice(tecBox, TermsAndConditions.ID, source.isMandatory());
+        ConsentDetailsActivity.addChoice(tecBox, TermsAndConditions.ID, source.isMandatory(), source.isChecked());
         append(tecBox, container);
     }
 

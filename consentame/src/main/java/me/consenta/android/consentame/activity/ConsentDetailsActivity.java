@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -30,7 +30,20 @@ import me.consenta.android.consentame.utils.UIMapper;
 
 public class ConsentDetailsActivity extends AppCompatActivity {
 
+
+
+    /**
+     * Execution mode of this Consent object
+     */
+    private enum Mode {CREATE, UPDATE}
+
+    /**
+     * Default ID of the Terms & Condition switch
+     */
+    private static final String TERMS_AND_CONDITIONS = "terms_and_conditions";
+
     private static Consent consent = null;
+    private static Mode mode = null;
     private boolean isMapped = false;
 
     private static HashMap<String, UserChoice> userChoices;
@@ -56,10 +69,17 @@ public class ConsentDetailsActivity extends AppCompatActivity {
         Intent caller = getIntent();
 
         ObjectMapper mapper = new ObjectMapper();
-        String consentJson = caller.getStringExtra("consent-json");
+        String consentJson = caller.getStringExtra("me.consenta.android.consent-json");
         LinkedList<String> acceptedPurposes = getPurposes(
-                caller.getStringArrayExtra("purposes")
+                caller.getStringArrayListExtra("me.consenta.android.purposes")
         );
+
+        // set execution mode
+        if (acceptedPurposes == null) {
+            mode = Mode.CREATE;
+        } else {
+            mode = Mode.UPDATE;
+        }
 
         if (consentJson == null || consentJson.isEmpty()) {
             setErrorMessage("no Consent fetched (null)");
@@ -70,9 +90,15 @@ public class ConsentDetailsActivity extends AppCompatActivity {
             // try to write data to a Consent object
             consent = mapper.readValue(consentJson, Consent.class);
 
-            if (acceptedPurposes != null) {
+            // save checked purposes in consent
+            if (mode == Mode.UPDATE) {
+                if (acceptedPurposes.contains(TERMS_AND_CONDITIONS)) {
+                    consent.getTermsAndConditions().setChecked(true);
+                }
+
                 for (Purpose p : consent.getPurposes()) {
-                    if (acceptedPurposes.contains(p.getInternalId())) {
+                    String purposeID = p.getInternalId();
+                    if (acceptedPurposes.contains(purposeID)) {
                         p.getAdditionalProperties().put("accepted", true);
                     }
                 }
@@ -83,7 +109,7 @@ public class ConsentDetailsActivity extends AppCompatActivity {
             if (Constants.DEV) {
                 err = e.getMessage();
             } else {
-                err = "Consent not found. Please contact the app developer.";
+                err = "Invalid consent. Please contact the app developer.";
             }
 
             // don't call 'setErrorMessage()'! 'err' might be null, but in this case an error must
@@ -94,17 +120,17 @@ public class ConsentDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private LinkedList<String> getPurposes(String[] purposes) {
+    private LinkedList<String> getPurposes(ArrayList<String> purposes) {
         if (purposes == null) {
             return null;
         }
         return new LinkedList<>(
-                Arrays.asList(purposes)
+                purposes
         );
     }
 
     /**
-     *  map Consent object to UI
+     *  map Consent object to UI elements
      */
     private void mapToUI() {
         if(isMapped) {
@@ -114,12 +140,12 @@ public class ConsentDetailsActivity extends AppCompatActivity {
         }
 
         // Data Processors
-         LinearLayout dataControllersList = findViewById(R.id.data_controllers_list);
+        LinearLayout dataControllersList = findViewById(R.id.data_controllers_list);
         UIMapper.map(consent.getDataProcessors(), dataControllersList);
 
         // T&C
         RelativeLayout termsAndConditionsBox = findViewById(R.id.tec);
-        UIMapper.map(consent.termsAndConditions(), termsAndConditionsBox);
+        UIMapper.map(consent.getTermsAndConditions(), termsAndConditionsBox);
 
         // Privacy Policy
         TextView privacyPolicyCompleteLink = findViewById(R.id.policy_complete_link);
@@ -141,25 +167,49 @@ public class ConsentDetailsActivity extends AppCompatActivity {
         final ScrollView scrollView = findViewById(R.id.scroll_consent);
 
         final ConsentDetailsActivity thisConsentDetailsActivity = this;
-        Button submitBtn = findViewById(R.id.check_and_submit);
+        final Button submitBtn = findViewById(R.id.check_and_submit);
+        if (mode == Mode.UPDATE) {
+            submitBtn.setText(R.string.consent_back_btn_text);
+        } else {
+            submitBtn.setText(R.string.consent_submit_btn_text);
+        }
+
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SwitchCompat unchecked = parseUserChoices();
-                if (unchecked == null) {
-                    // OK, send consent and call ConsentaMeCheckButton.check()
-                    Intent i = new Intent(v.getContext(), SubmitConsentActivity.initClass(userChoices.values()));
-                    i.putExtra("id", consent.getConsentId());
-                    current = thisConsentDetailsActivity;
-                    startActivity(i);
-                } else {
+                if (unchecked != null) {
                     // focus on the non-acceptable choice and show that it's mandatory
                     unchecked.requestFocus();
                     scrollView.scrollTo(unchecked.getScrollX(), unchecked.getScrollY());
                     unchecked.setText(getResources().getString(R.string.mandatory_check_text));
                     unchecked.setTextColor(getResources().getColor(R.color.error_red));
                     scrollView.invalidate();
+                    return;
                 }
+
+                // all mandatory purposes are checked
+                if (mode == Mode.CREATE) {
+                    // OK, send consent and call ConsentaMeCheckButton.check()
+                    Intent i = new Intent(v.getContext(), SubmitConsentActivity.initClass(userChoices.values()));
+                    i.putExtra("me.consenta.android.id", consent.getConsentId());
+                    current = thisConsentDetailsActivity;
+                    startActivity(i);
+                } else if (mode == Mode.UPDATE) {
+                    boolean isModified = submitBtn.getText().equals(
+                            getString(R.string.consent_update_btn_text)
+                    );
+
+                    if (isModified) {
+                        Intent i = new Intent(v.getContext(), UpdateConsentActivity.initClass(userChoices.values()));
+
+                        // TODO send update consent request
+                        System.out.println("*UPDATE CONSENT*");
+                    } else {
+                        onBackPressed();
+                    }
+                } else
+                    throw new IllegalStateException("Invalid value for 'mode'");
             }
         });
     }
@@ -203,14 +253,15 @@ public class ConsentDetailsActivity extends AppCompatActivity {
         }
     }
 
-    public static void addChoice(View v, int id, boolean mandatory, boolean selected) {
+    public static void addChoice(final View v, final int id, final boolean mandatory, final boolean selected) {
         final SwitchCompat sel = v.findViewById(R.id.selector);
         sel.setChecked(selected);
 
-        if (mandatory) {
-            sel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View clickedView) {
+
+        sel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View clickedView) {
+                if (mandatory) {
                     // Hide "MANDATORY" text when clicked. Text is displayed by
                     // setShowText(true), called inside OnClickListener of the submitBtn
                     if (clickedView == sel) {
@@ -218,14 +269,16 @@ public class ConsentDetailsActivity extends AppCompatActivity {
                         sel.invalidate();
                     }
                 }
-            });
-        }
+
+                // set confirmation button text to "UPDATE"
+                if (mode == Mode.UPDATE) {
+                    Button submitBtn = v.getRootView().findViewById(R.id.check_and_submit);
+                    submitBtn.setText(R.string.consent_update_btn_text);
+                }
+            }
+        });
 
         userChoices.put("" + id, new UserChoice(sel, id, mandatory));
-    }
-
-    public static void addChoice(View v, int id, boolean mandatory) {
-        addChoice(v, id, mandatory, false);
     }
 
     public static SwitchCompat parseUserChoices() {
@@ -252,8 +305,13 @@ public class ConsentDetailsActivity extends AppCompatActivity {
      * @param notificator the {@link SubmitConsentActivity} which ended successfully.
      */
     public void notifySuccess(final SubmitConsentActivity notificator) {
-        if (notificator == null) {throw new IllegalArgumentException("Not a valid submission.");}
+        if (notificator == null) {throw new IllegalArgumentException("Invalid notifier.");}
+        notifySuccess();
+    }
+
+    private void notifySuccess() {
         consent = null;
+        mode = null;
         finish();
     }
 }

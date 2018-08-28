@@ -82,7 +82,7 @@ public class Consent implements Serializable
     }
 
     @JsonProperty("terms_and_condition")
-    public TermsAndConditions termsAndConditions() {
+    public TermsAndConditions getTermsAndConditions() {
         return termsAndConditions;
     }
 

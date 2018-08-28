@@ -81,9 +81,16 @@ public class TermsAndConditions implements Serializable
         this.mandatory = mandatory;
     }
 
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("version", version).append("url", url).append("title", title).append("mandatory", mandatory).toString();
     }
-
 }

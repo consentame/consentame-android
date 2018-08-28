@@ -72,7 +72,7 @@ public final class DemoFetchConsentTask extends AsyncTask<Void, Void, String>{
         if (success) {
             caller.setConsoleText(null, false);
             Intent intent = new Intent(caller.getApplicationContext(), ConsentDetailsActivity.class);
-            intent.putExtra("consent-json", jsonResponse);
+            intent.putExtra("me.consenta.android.consent-json", jsonResponse);
 
             caller.startActivity(intent);
         } else {

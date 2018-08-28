@@ -4,7 +4,9 @@
     <string name="tec_accept">I accept your Terms &amp; Conditions</string>
     <string name="text_when_dropdown_toggle_closed">View More</string>
     <string name="text_when_dropdown_toggle_open">Hide</string>
-    <string name="submit_consent_btn_text">Submit</string>
+    <string name="consent_submit_btn_text">Submit</string>
     <string name="complete_version_link_text">complete version</string>
     <string name="mandatory_check_text">MANDATORY  </string>
+    <string name="consent_back_btn_text">Back</string>
+    <string name="consent_update_btn_text">Update</string>
 </resources>

@@ -26,5 +26,5 @@ public class Constants {
     /**
      * URL of test API
      */
-    public final static String DEV_HOST = "https://dev.consenta.me/api/consent";
+    public final static String DEV_HOST = "https://dev.consenta.me";
 }

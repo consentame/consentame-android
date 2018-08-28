@@ -18,13 +18,13 @@ import me.consenta.android.consentame.utils.Constants;
 
 public class SubmitConsentActivity extends AppCompatActivity {
 
-    private static String consentId;
+    protected static String consentId;
 
     TextView console;
     ProgressBar loading;
     Button action;
 
-    private static List<UserChoice> choices;
+    protected static List<UserChoice> choices;
     private int ERR_COLOR, MSG_COLOR;
 
     @Override
@@ -32,7 +32,7 @@ public class SubmitConsentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit);
 
-        consentId = getIntent().getStringExtra("id");
+        consentId = getIntent().getStringExtra("me.consenta.android.id");
 
         console = findViewById(R.id.loading_console);
         loading = findViewById(R.id.progressBar);
@@ -51,7 +51,7 @@ public class SubmitConsentActivity extends AppCompatActivity {
         submit();
     }
 
-    private void submit() {
+    protected void submit() {
         if (choices != null) {
             new SubmitConsentTask(this, consentId, choices).execute();
         } else {

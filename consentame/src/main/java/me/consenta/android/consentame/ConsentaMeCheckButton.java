@@ -172,11 +172,11 @@ public final class ConsentaMeCheckButton extends LinearLayout {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(context, ConsentaMeActivity.setUpClass());
-            intent.putExtra("id", btnHandler.getConsentId());
+            intent.putExtra("me.consenta.android.id", btnHandler.getConsentId());
             // if 'null', the ConsentaMeActivity will create a new consent,
             // otherwise the old one will be fetched and updated.
-            intent.putExtra("user_consent_id", btnHandler.getUserConsentId());
-            intent.putExtra("consenbt_update_token", updateAccessToken);
+            intent.putExtra("me.consenta.android.user_consent_id", btnHandler.getUserConsentId());
+            intent.putExtra("me.consenta.android.consent_update_token", updateAccessToken);
             currentButton = thisBtn;
             context.startActivity(intent);
         }
