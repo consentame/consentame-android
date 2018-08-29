@@ -49,28 +49,6 @@ public final class ConsentaMe {
     }
 
     /**
-     * Get the Consent ID of the linked {@link ConsentaMeCheckButton}
-     *
-     * @return a {@link String} containing the Consent ID
-     */
-    public String getConsentId() {
-        return button.getConsentId();
-    }
-
-    /**
-     * Get the User Consent ID of the linked {@link ConsentaMeCheckButton}
-     *
-     * @return a {@link String} containing the User Consent ID. If the button was not checked,
-     *      this will return {@code null}
-     *
-     * @see #isChecked()
-     */
-    @Nullable
-    public String getUserConsentId() {
-        return button.getUserConsentId();
-    }
-
-    /**
      * Set the button to checked and bind it to a specific User Consent ID.
      * Also set a new temporary access token for review / update operations on that Consent.
      *
@@ -95,6 +73,28 @@ public final class ConsentaMe {
      */
     public void init(String temporaryToken) {
         init(temporaryToken, null);
+    }
+
+    /**
+     * Get the Consent ID of the linked {@link ConsentaMeCheckButton}
+     *
+     * @return a {@link String} containing the Consent ID
+     */
+    public String getConsentId() {
+        return button.getConsentId();
+    }
+
+    /**
+     * Get the User Consent ID of the linked {@link ConsentaMeCheckButton}
+     *
+     * @return a {@link String} containing the User Consent ID. If the button was not checked,
+     *      this will return {@code null}
+     *
+     * @see #isChecked()
+     */
+    @Nullable
+    public String getUserConsentId() {
+        return button.getUserConsentId();
     }
 
     /**

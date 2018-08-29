@@ -2,6 +2,7 @@ package me.consenta.android.consentame.activity;
 
 import android.os.AsyncTask;
 import android.view.View;
+import android.widget.Toast;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import me.consenta.android.consentame.ConsentaMeCheckButton;
+import me.consenta.android.consentame.R;
 import me.consenta.android.consentame.model.SubmitErrorResponse;
 import me.consenta.android.consentame.model.SubmitSuccessResponse;
 import me.consenta.android.consentame.model.UserChoice;
@@ -29,12 +31,12 @@ class SubmitConsentTask extends AsyncTask<Void, Void, Boolean> {
 
     private String payload = "no payload";
 
-    private SubmitConsentActivity caller;
+    protected SubmitConsentActivity caller;
 
     SubmitConsentTask(SubmitConsentActivity caller, String consentId, List<UserChoice> choices) {
         super();
         this.caller = caller;
-        request = new UserConsentRequest(consentId, choices);
+        request = caller.getRequestWrapper(consentId, choices);
     }
 
     @Override
@@ -54,7 +56,9 @@ class SubmitConsentTask extends AsyncTask<Void, Void, Boolean> {
         String resContent;
         try {
             // HTTP call to Consenta.me API
-            resContent = httpClient.newCall(request.parse()).execute().body().string();
+            resContent = httpClient.newCall(
+                    request.parse()
+            ).execute().body().string();
         } catch (NullPointerException npex) {
             payload = DEBUG_MSG + "Null body found inside server response";
             return false;
@@ -108,10 +112,14 @@ class SubmitConsentTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean success) {
         caller.loading.setVisibility(View.GONE);
+        Toast.makeText(caller.getApplicationContext(), R.string.success_toast_msg, Toast.LENGTH_SHORT)
+                .show();
         caller.notifySuccess();
         if (success) {
             ConsentaMeCheckButton.setCurrentButtonChecked(payload);
             ConsentaMeCheckButton.releaseCurrent();
+            Toast.makeText(caller.getApplicationContext(), R.string.success_toast_msg, Toast.LENGTH_SHORT)
+                    .show();
             caller.setConsoleText("Success!", false);
             caller.action.setText("Continue");
             caller.action.setOnClickListener(new View.OnClickListener() {
@@ -123,12 +131,16 @@ class SubmitConsentTask extends AsyncTask<Void, Void, Boolean> {
             });
             caller.action.setVisibility(View.VISIBLE);
         } else {
-            if (payload.startsWith(DEBUG_MSG) && !DEV) {
-                // TODO subclass exception
-                caller.setConsoleText("Error: Something went wrong. Please try again", true);
-            } else {
-                caller.setConsoleText(payload, true);
-            }
+            showError();
+        }
+    }
+
+    protected void showError() {
+        if (payload.startsWith(DEBUG_MSG) && !DEV) {
+            // TODO subclass exception
+            caller.setConsoleText("Error: Something went wrong. Please try again", true);
+        } else {
+            caller.setConsoleText(payload, true);
         }
     }
 }

@@ -32,6 +32,9 @@ public class UserConsentRequest implements Serializable
     @JsonIgnore
     private String consentId;
 
+    @JsonIgnore
+    protected String apiUrl = Constants.HOST + "/api/consent/" + consentId + "/";
+
     /**
      * No args constructor for use in serialization
      *
@@ -69,13 +72,11 @@ public class UserConsentRequest implements Serializable
         ObjectMapper mapper = new ObjectMapper();
         RequestBody body = RequestBody.create(json, mapper.writeValueAsString(this));
 
-
         return new Request.Builder()
-                .url(Constants.HOST + "/" + consentId + "/")
+                .url(apiUrl)
                 .post(body)
                 .build();
     }
-
     @JsonProperty("tec")
     public boolean isTec() {
         return tec;

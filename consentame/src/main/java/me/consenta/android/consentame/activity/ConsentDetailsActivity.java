@@ -29,29 +29,35 @@ import me.consenta.android.consentame.utils.Constants;
 import me.consenta.android.consentame.utils.UIMapper;
 
 public class ConsentDetailsActivity extends AppCompatActivity {
-
-
-
     /**
-     * Execution mode of this Consent object
+     * Execution mode of this {@link ConsentDetailsActivity}
      */
-    private enum Mode {CREATE, UPDATE}
+    private enum Mode {CREATE, UPDATE;
+    }
 
     /**
-     * Default ID of the Terms & Condition switch
+     * Default ID of the Terms & Condition in the accepted purposes list
      */
     private static final String TERMS_AND_CONDITIONS = "terms_and_conditions";
+
+    /**
+     * Holds the currently running instance of {@link ConsentDetailsActivity} while
+     * a {@link SubmitConsentTask} is running. No more than 1 instance can be running at any time.
+     */
+    private static ConsentDetailsActivity current;
 
     private static Consent consent = null;
     private static Mode mode = null;
     private boolean isMapped = false;
 
+    // params for UPDATE
+    private String userConsentId = null;
+    private String temporaryAccessToken = null;
+
     private static HashMap<String, UserChoice> userChoices;
 
     private static String exitMsg;
     private static boolean unreadErrors;
-
-    private static ConsentDetailsActivity current;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,18 +66,21 @@ public class ConsentDetailsActivity extends AppCompatActivity {
 
         userChoices = new HashMap<>();
 
+        // params for UPDATE
+        userConsentId = getIntent().getStringExtra("me.consenta.android.user-consent-id");
+        temporaryAccessToken = getIntent().getStringExtra("me.consenta.android.token");
+
         unreadErrors = false;
 
-        if (consent != null)
-            return;
-
         // load consent from json only if 'consent' is not initialized
-        Intent caller = getIntent();
-
+        if (consent != null) {
+            return;
+        }
         ObjectMapper mapper = new ObjectMapper();
-        String consentJson = caller.getStringExtra("me.consenta.android.consent-json");
+        Intent intent = getIntent();
+        String consentJson = intent.getStringExtra("me.consenta.android.consent-json");
         LinkedList<String> acceptedPurposes = getPurposes(
-                caller.getStringArrayListExtra("me.consenta.android.purposes")
+                intent.getStringArrayListExtra("me.consenta.android.purposes")
         );
 
         // set execution mode
@@ -201,11 +210,21 @@ public class ConsentDetailsActivity extends AppCompatActivity {
                     );
 
                     if (isModified) {
-                        Intent i = new Intent(v.getContext(), UpdateConsentActivity.initClass(userChoices.values()));
+                        Intent i = new Intent(v.getContext(), UpdateConsentActivity.initClass(temporaryAccessToken, userChoices.values()));
 
-                        // TODO send update consent request
-                        System.out.println("*UPDATE CONSENT*");
+                        if(userConsentId == null) {
+                            throw new IllegalArgumentException("No user consent ID provided");
+                        }
+                        if(temporaryAccessToken == null) {
+                            throw new IllegalArgumentException("No access token provided");
+                        }
+                        i.putExtra("me.consenta.android.id", userConsentId);
+
+                        startActivity(i);
+
+                        System.out.println("*UPDATE CONSENT*"); // TODO remove
                     } else {
+                        // act like the back button
                         onBackPressed();
                     }
                 } else
@@ -236,7 +255,7 @@ public class ConsentDetailsActivity extends AppCompatActivity {
         super.onPostResume();
     }
 
-    public static String readErrorMessage() {
+    public static String getErrorMessage() {
         if (unreadErrors)
             return exitMsg;
         else

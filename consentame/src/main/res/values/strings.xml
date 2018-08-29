@@ -9,4 +9,5 @@
     <string name="mandatory_check_text">MANDATORY  </string>
     <string name="consent_back_btn_text">Back</string>
     <string name="consent_update_btn_text">Update</string>
+    <string name="success_toast_msg">Success!</string>
 </resources>

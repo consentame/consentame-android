@@ -14,18 +14,19 @@ import java.util.List;
 
 import me.consenta.android.consentame.R;
 import me.consenta.android.consentame.model.UserChoice;
+import me.consenta.android.consentame.model.UserConsentRequest;
 import me.consenta.android.consentame.utils.Constants;
 
 public class SubmitConsentActivity extends AppCompatActivity {
 
     protected static String consentId;
 
-    TextView console;
-    ProgressBar loading;
-    Button action;
+    protected TextView console;
+    protected ProgressBar loading;
+    protected Button action;
 
     protected static List<UserChoice> choices;
-    private int ERR_COLOR, MSG_COLOR;
+    protected int ERR_COLOR, MSG_COLOR;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class SubmitConsentActivity extends AppCompatActivity {
             if (Constants.DEV)
                 throw new RuntimeException("You have to use method initClass(List<UserChoice>) before starting this activity.");
             else
-                setConsoleText("SubmitConsentActivity: Internal app error. Please contact the developer.", true);
+                setConsoleText("SubmitConsentActivity: Internal app error (wrong initialization). Please contact the developer.", true);
         }
     }
 
@@ -71,7 +72,7 @@ public class SubmitConsentActivity extends AppCompatActivity {
         ConsentDetailsActivity.getCurrent().notifySuccess(this);
     }
 
-    public static Class<SubmitConsentActivity> initClass(Collection<UserChoice> userChoicesList) {
+    public static Class<? extends SubmitConsentActivity> initClass(Collection<UserChoice> userChoicesList) {
         choices = new LinkedList<>(userChoicesList);
         return SubmitConsentActivity.class;
     }
@@ -96,5 +97,19 @@ public class SubmitConsentActivity extends AppCompatActivity {
         }
 
         console.setText(text);
+    }
+
+    /**
+     * Return a {@link UserConsentRequest} that can be parsed and sent to Consenta.me with a
+     * {@link okhttp3.OkHttpClient OkHttpClient}.
+     *
+     * @param consentId the ID of the Consent to submit
+     * @param choices the list of accepted purposes, mapped as {@link UserChoice}
+     *
+     * @return a {@link UserConsentRequest} (or a subclass) that can be used to submit the new
+     * Consent and receive a User Consent ID
+     */
+    public UserConsentRequest getRequestWrapper(String consentId, List<UserChoice> choices) {
+        return new UserConsentRequest(consentId, choices);
     }
 }

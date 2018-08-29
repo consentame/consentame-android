@@ -70,8 +70,9 @@ public final class ConsentaMeActivity extends AppCompatActivity {
         retry = findViewById(R.id.retry_button);
 
         consentId = getIntent().getStringExtra("me.consenta.android.id");
-        userConsentId = getIntent().getStringExtra("me.consenta.android.user_consent_id");
 
+        // parameters for update operation - on creation of a new Consent these params are 'null'
+        userConsentId = getIntent().getStringExtra("me.consenta.android.user_consent_id");
         token = getIntent().getStringExtra("me.consenta.android.consent_update_token");
 
         final ConsentaMeActivity thisConsentaMeActivity = this;
@@ -90,7 +91,7 @@ public final class ConsentaMeActivity extends AppCompatActivity {
         else
             new FetchConsentTask().execute(consentId, userConsentId);
 
-        String error = ConsentDetailsActivity.readErrorMessage();
+        String error = ConsentDetailsActivity.getErrorMessage();
 
         if (!error.isEmpty()) {
             setConsoleText(error, true);
@@ -197,7 +198,7 @@ public final class ConsentaMeActivity extends AppCompatActivity {
 
 
                     // map response to HashMap and return list of purpose IDs
-                    HashMap result;
+                    HashMap<String, Object> result;
                     result = new ObjectMapper().readValue(
                             resp.body().string(),
                             new TypeReference<HashMap>(){}
@@ -251,6 +252,10 @@ public final class ConsentaMeActivity extends AppCompatActivity {
                 Intent intent = new Intent(ConsentaMeActivity.this, ConsentDetailsActivity.class);
                 intent.putExtra("me.consenta.android.consent-json", (String) returnValues.get("consent"));
                 intent.putExtra("me.consenta.android.purposes", purposes);
+
+                // parameters for Update operation - on creation, these values are null
+                intent.putExtra("me.consenta.android.user-consent-id", userConsentId);
+                intent.putExtra("me.consenta.android.token", token);
 
                 notifySuccess(); // finish ConsentaMeActivity
                 startActivity(intent); // start ConsentDetailsActivity
