@@ -51,6 +51,9 @@ public class UIMapper {
 
         container.removeAllViews();
 
+        if (sourceList == null || sourceList.isEmpty())
+            throw new IllegalArgumentException("ERROR: Empty Consent received");
+
         Object o = sourceList.get(0);
 
         if (o instanceof DataController) {
@@ -85,17 +88,18 @@ public class UIMapper {
             }
         });
 
-        // get instance of the LinearLayout which contains the TeC
+        // get instance of the LinearLayout which contains the T&C
         LinearLayout tecContainer = container.findViewById(R.id.tec_container);
         tecContainer.removeAllViews();
-        container.invalidate();
 
-        RelativeLayout tecBox = (RelativeLayout) tecContainer.inflate(container.getContext(), layoutId, null);
+        RelativeLayout tecBox = (RelativeLayout) RelativeLayout.inflate(container.getContext(), layoutId, null);
+//        RelativeLayout tecBox = (RelativeLayout) tecContainer.inflate(container.getContext(), layoutId, null);
         TextView desc = tecBox.findViewById(R.id.tec_desc);
         desc.setText(source.getTitle());
 
-        ConsentDetailsActivity.addChoice(tecBox, TermsAndConditions.ID, source.isMandatory(), source.isChecked());
-        append(tecBox, container);
+        ConsentDetailsActivity.addChoice(tecBox, TermsAndConditions.ID, "tec", source.isMandatory(), source.isChecked());
+        append(tecBox, tecContainer);
+        container.invalidate();
     }
 
     /**
@@ -210,7 +214,7 @@ public class UIMapper {
         Map p = source.getAdditionalProperties();
         boolean isChecked = p.containsKey("accepted") && (boolean) p.get("accepted");
 
-        ConsentDetailsActivity.addChoice(view, source.getId(), source.isMandatory(), isChecked);
+        ConsentDetailsActivity.addChoice(view, source.getId(), source.getInternalId(), source.isMandatory(), isChecked);
 
         // long DATA CONTROLLERS
         LinearLayout dcContainer = dropDown.findViewById(R.id.p_data_controllers_full);

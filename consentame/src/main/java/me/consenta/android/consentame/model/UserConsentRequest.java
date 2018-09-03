@@ -33,7 +33,7 @@ public class UserConsentRequest implements Serializable
     private String consentId;
 
     @JsonIgnore
-    protected String apiUrl = Constants.HOST + "/api/consent/" + consentId + "/";
+    protected String apiUrl = Constants.HOST + "/api/consent/";
 
     /**
      * No args constructor for use in serialization
@@ -50,6 +50,7 @@ public class UserConsentRequest implements Serializable
         this.tec = false;
 
         this.consentId = consentId;
+        this.apiUrl += this.consentId + "/";
 
         this.accepted = new LinkedList<>();
         for (UserChoice choice : choiceList) {

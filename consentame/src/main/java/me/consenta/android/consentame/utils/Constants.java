@@ -27,4 +27,6 @@ public class Constants {
      * URL of test API
      */
     public final static String DEV_HOST = "https://dev.consenta.me";
+
+    public final static String TEST_HOST = "http://3e5bcdec.ngrok.io";
 }

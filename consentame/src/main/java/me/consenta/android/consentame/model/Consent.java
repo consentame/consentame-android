@@ -51,6 +51,7 @@ public class Consent implements Serializable
     private String policyUrl;
     @JsonProperty("website_domain")
     private String websiteDomain;
+
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
 

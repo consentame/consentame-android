@@ -60,19 +60,27 @@ public final class ConsentaMe {
     public void init(String temporaryToken, String userConsentId) {
         if (userConsentId != null) {
             button.setButtonChecked(userConsentId);
+        } else {
+            button.setButtonUnchecked();
         }
         button.setAccessToken(temporaryToken);
+        button.invalidate();
     }
 
     /**
      * Set a new temporary access token for review / update operations.
+     * Button MUST have been checked before this method can be called; otherwise an
+     * {@link IllegalStateException} will be thrown.
      *
      * @param temporaryToken the token that can be used to fetch / update the consent.
      *                       It must be requested to the app's backend, which can obtain one with
      *                       an API call to Consenta.me
      */
     public void init(String temporaryToken) {
-        init(temporaryToken, null);
+        if (button.getUserConsentId() == null)
+            throw new IllegalStateException("This consent has not been accepted yet!");
+        button.setAccessToken(temporaryToken);
+        button.invalidate();
     }
 
     /**
@@ -163,4 +171,29 @@ public final class ConsentaMe {
         return ConsentaMeCheckButton.getCurrentInstance() != null;
     }
 
+    // LAYOUT METHODS
+
+    /**
+     * Set the button's visibility to {@link View#VISIBLE VISIBLE}
+     */
+    public void visible() {
+        button.setVisibility(View.VISIBLE);
+        button.invalidate();
+    }
+
+    /**
+     * Set the button's visibility to {@link View#INVISIBLE INVISIBLE}
+     */
+    public void invisible() {
+        button.setVisibility(View.INVISIBLE);
+        button.invalidate();
+    }
+
+    /**
+     * Set the button's visibility to {@link View#GONE GONE}
+     */
+    public void gone() {
+        button.setVisibility(View.GONE);
+        button.invalidate();
+    }
 }

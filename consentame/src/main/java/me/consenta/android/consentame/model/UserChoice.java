@@ -13,6 +13,7 @@ public class UserChoice {
 
     private SwitchCompat choice;
     private int purposeId;
+    private String purposeName;
     private boolean mandatory;
 
     /**
@@ -22,9 +23,10 @@ public class UserChoice {
      * @param id the id of the {@link Purpose} which the user is asked to choose about
      * @param mandatoryChoice if {@code true}, the user must accept this Purpose
      */
-    public UserChoice(SwitchCompat choice, int id, boolean mandatoryChoice) {
+    public UserChoice(SwitchCompat choice, int id, String name, boolean mandatoryChoice) {
         this.choice = choice;
         this.purposeId = id;
+        this.purposeName = name;
         this.mandatory = mandatoryChoice;
     }
 

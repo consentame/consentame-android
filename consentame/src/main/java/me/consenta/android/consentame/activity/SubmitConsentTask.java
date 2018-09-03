@@ -20,6 +20,7 @@ import me.consenta.android.consentame.model.SubmitSuccessResponse;
 import me.consenta.android.consentame.model.UserChoice;
 import me.consenta.android.consentame.model.UserConsentRequest;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 import static me.consenta.android.consentame.utils.Constants.DEV;
 
@@ -55,10 +56,13 @@ class SubmitConsentTask extends AsyncTask<Void, Void, Boolean> {
 
         String resContent;
         try {
+            Request apiCall = request.parse();
             // HTTP call to Consenta.me API
             resContent = httpClient.newCall(
-                    request.parse()
-            ).execute().body().string();
+                    apiCall
+            ).execute()
+            .body()
+            .string();
         } catch (NullPointerException npex) {
             payload = DEBUG_MSG + "Null body found inside server response";
             return false;

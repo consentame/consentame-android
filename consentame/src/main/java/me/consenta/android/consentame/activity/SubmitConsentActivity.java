@@ -1,5 +1,8 @@
 package me.consenta.android.consentame.activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -36,6 +40,18 @@ public class SubmitConsentActivity extends AppCompatActivity {
         consentId = getIntent().getStringExtra("me.consenta.android.id");
 
         console = findViewById(R.id.loading_console);
+        console.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                clip.setPrimaryClip(
+                        ClipData.newPlainText("consentaError", console.getText())
+                );
+                Toast.makeText(SubmitConsentActivity.this, "Copied to Clipboard", Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+        });
         loading = findViewById(R.id.progressBar);
         action = findViewById(R.id.action_button);
 

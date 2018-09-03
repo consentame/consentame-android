@@ -1,5 +1,8 @@
 package me.consenta.android.consentame.activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,20 +11,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import me.consenta.android.consentame.ConsentaMeCheckButton;
 import me.consenta.android.consentame.R;
 import me.consenta.android.consentame.model.Consent;
+import me.consenta.android.consentame.model.Purpose;
+import me.consenta.android.consentame.model.TermsAndConditions;
 import me.consenta.android.consentame.utils.Constants;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -68,6 +77,19 @@ public final class ConsentaMeActivity extends AppCompatActivity {
         console = findViewById(R.id.loading_console);
         loading = findViewById(R.id.progressBar);
         retry = findViewById(R.id.retry_button);
+
+        console.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                clip.setPrimaryClip(
+                        ClipData.newPlainText("consentaError", console.getText())
+                );
+                Toast.makeText(ConsentaMeActivity.this, "Copied to Clipboard", Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+        });
 
         consentId = getIntent().getStringExtra("me.consenta.android.id");
 
@@ -163,55 +185,60 @@ public final class ConsentaMeActivity extends AppCompatActivity {
         @Override
         protected HashMap<String, Object> doInBackground(String... strings) {
             HashMap<String, Object> data = new HashMap<>();
-
-            String consentId = strings[0];
-            String ucID = strings[1];
-
             if (DEMO) {
                 return data;
             }
-
-            String fetchConsent = Constants.HOST + "/api/consent/" + consentId;
-
+            String consentId = strings[0];
+            String ucID = strings[1];
             // API call to Consenta.me to fetch consent details
+            String apiUrl;
+            Response resp;
             try {
+                // Read Consent
+                apiUrl = Constants.HOST + "/api/consent/" + consentId;
                 Request readConsent = new Request.Builder()
                         .get()
-                        .url(fetchConsent)
+                        .url(apiUrl)
                         .build();
-                Response resp = httpClient.newCall(readConsent).execute();
-
+                // call API
+                try {
+                    resp = httpClient.newCall(readConsent).execute();
+                } catch (SocketTimeoutException ex) {
+                    throw new IOException("Server Timeout Error. The server took too long to respond.", ex);
+                }
                 // return JSON string
                 data.put("consent", resp.body().string());
 
                 if (ucID != null) {
-                    // Fetch consent
-                    // https://dev.consenta.me/api/userconsent/USER_CONSENT_ID/check/
-                    String fetchAcceptedPurposes = Constants.HOST + "/api/userconsent/" + ucID + "/check/";
+                    // Fetch UserConsent
+                    apiUrl = Constants.HOST + "/api/userconsent/" + ucID;
 
                     Request readPurposes = new Request.Builder()
                             .get()
-                            .url(fetchAcceptedPurposes)
-                            .addHeader("Authorization", "Token " + token)
+                            .url(apiUrl)
+                            .addHeader("Authorization", "Bearer " + token)
                             .build();
-                    resp = httpClient.newCall(readPurposes).execute();
-
-
-                    // map response to HashMap and return list of purpose IDs
+                    // call API
+                    try {
+                        resp = httpClient.newCall(readPurposes).execute();
+                    } catch (SocketTimeoutException e) {
+                        throw new IOException("Server Timeout Error. The server took too long to respond.", e);
+                    }
+                    // map response to HashMap
                     HashMap<String, Object> result;
                     result = new ObjectMapper().readValue(
                             resp.body().string(),
                             new TypeReference<HashMap>(){}
                     );
-                    if (! result.containsKey("accepted")) {
-                        // Exceptions are caught below and their message will be passed as an error
-                        if (result.containsKey("detail"))
-                            throw new IOException("ERROR: " + result.get("detail"));
-                        throw new IOException("ERROR: couldn't fetch accepted Purposes");
-                    }
-                    ArrayList<String> accepted = (ArrayList<String>) result.get("accepted");
+                    // add list of accepted Purpose IDs to returned values
+                    ArrayList<Purpose> accepted = parseAcceptedPurposes(result);
                     data.put("purposes", accepted);
                 }
+            } catch (JsonParseException e) {
+                // server returned error page and not a valid response
+                if (DEV)
+                    e.printStackTrace();
+                data.put("error", "500 Internal Server Error");
             } catch (IOException e) {
                 // return client's error message
                 if (DEV)
@@ -222,28 +249,66 @@ public final class ConsentaMeActivity extends AppCompatActivity {
             return data;
         }
 
+        private ArrayList<Purpose> parseAcceptedPurposes(HashMap<String, Object> userConsentDetails) throws IOException {
+            // verify required keys
+            if (! (userConsentDetails.containsKey("accepted") && userConsentDetails.containsKey("terms_and_conditions"))) {
+                // Exceptions are caught below and their message will be passed as an error
+                if (userConsentDetails.containsKey("detail"))
+                    throw new IOException("ERROR: " + userConsentDetails.get("detail"));
+                throw new IOException("ERROR: failed to read user's consent");
+            }
+            // parse Purposes
+            ArrayList<Purpose> accepted = new ArrayList<>();
+            for (Object element : (List) userConsentDetails.get("accepted")) {
+                Purpose p = new ObjectMapper().convertValue(
+                        element,
+                        Purpose.class
+                );
+                accepted.add(p);
+            }
+            // Parse T&C
+            if ((Boolean) userConsentDetails.get("terms_and_conditions")) {
+                Purpose p = new Purpose(
+                        TermsAndConditions.ID,
+                        "Terms and Conditions",
+                        "terms_and_conditions"
+                );
+                accepted.add(p);
+            }
+            return accepted;
+        }
+
         @Override
         protected void onPostExecute(HashMap<String, Object> returnValues) {
             loading.setVisibility(View.GONE);
 
             success = !(returnValues.containsKey("error"));
 
-            ObjectMapper mapper = new ObjectMapper();
-            try {
-                // try to map AsyncTask's result on a 'Consent' object
-                mapper.readValue(
-                        (String) returnValues.get("consent"),
-                        Consent.class
-                );
-            } catch (IOException e) {
-                // failed to map - not a Consent
-                success = false;
-                returnValues.put("error", e.getMessage());
-            }
+            ArrayList<Integer> purposes = null;
 
-            ArrayList<String> purposes = null;
-            if (returnValues.containsKey("purposes")) {
-                purposes = (ArrayList<String>) returnValues.get("purposes");
+            if (success) {
+                // try to map AsyncTask's result on a 'Consent' object;
+                // update 'success' flag
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    mapper.readValue(
+                            (String) returnValues.get("consent"),
+                            Consent.class
+                    );
+                } catch (IOException e) {
+                    // failed to map - not a Consent
+                    success = false;
+                    returnValues.put("error", e.getMessage());
+                }
+
+                purposes = null;
+                if (returnValues.containsKey("purposes")) {
+                    List<Purpose> acceptedPurposes = (List<Purpose>) returnValues.get("purposes");
+                    purposes = new ArrayList<>() ;
+                    for (Purpose p : acceptedPurposes) {
+                        purposes.add(p.getId());
+                    }
+                }
             }
 
             if (success) {

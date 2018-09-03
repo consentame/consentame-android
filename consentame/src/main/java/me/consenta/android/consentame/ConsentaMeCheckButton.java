@@ -83,6 +83,16 @@ public final class ConsentaMeCheckButton extends LinearLayout {
     }
 
     /**
+     * Change the Button's state to 'unchecked'
+     */
+    void setButtonUnchecked() {
+        ImageSwitcher checkBoxImg = this.findViewById(R.id.checkboxes);
+        checkBoxImg.setImageResource(R.drawable.ic_square);
+        this.userConsentId = null;
+        this.checked = false;
+    }
+
+    /**
      * Store the access token that will be used for updating the Consent.
      *
      * @param token the access token that is needed to update a Consent. Tokens are provided to
@@ -153,6 +163,7 @@ public final class ConsentaMeCheckButton extends LinearLayout {
         return userConsentId;
     }
 
+
     /**
      * {@link android.view.View.OnClickListener} implementation that handles the click actions on
      * the {@link ConsentaMeCheckButton}.
@@ -171,6 +182,7 @@ public final class ConsentaMeCheckButton extends LinearLayout {
 
         @Override
         public void onClick(View v) {
+
             Intent intent = new Intent(context, ConsentaMeActivity.setUpClass());
             intent.putExtra("me.consenta.android.id", btnHandler.getConsentId());
             // if 'null', the ConsentaMeActivity will create a new consent,

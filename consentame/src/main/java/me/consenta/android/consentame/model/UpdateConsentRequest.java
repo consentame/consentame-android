@@ -22,7 +22,7 @@ public class UpdateConsentRequest extends UserConsentRequest {
 
     public UpdateConsentRequest(String userConsentId, String accessToken, List<UserChoice> choiceList) {
         super(userConsentId, choiceList);
-        apiUrl = Constants.HOST + "/api/userconsent/" + userConsentId + "/" + accessToken;
+        apiUrl = Constants.HOST + "/api/userconsent/" + userConsentId + "/";
     }
 
     @Override
@@ -30,6 +30,11 @@ public class UpdateConsentRequest extends UserConsentRequest {
         MediaType json = MediaType.parse("application/json; charset=utf-8");
         ObjectMapper mapper = new ObjectMapper();
         RequestBody body = RequestBody.create(json, mapper.writeValueAsString(this));
+
+        System.out.println("* * SENDING UPDATE REQUEST: * *");
+        System.out.println("* URL = " + apiUrl);
+        System.out.println("* JSON = " + mapper.writeValueAsString(this));
+        System.out.println("* * * * * * * * * * * * * * * *");
 
         return new Request.Builder()
                 .url(apiUrl)

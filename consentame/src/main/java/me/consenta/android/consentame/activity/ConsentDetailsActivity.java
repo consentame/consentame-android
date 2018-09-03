@@ -24,6 +24,7 @@ import me.consenta.android.consentame.ConsentaMeCheckButton;
 import me.consenta.android.consentame.R;
 import me.consenta.android.consentame.model.Consent;
 import me.consenta.android.consentame.model.Purpose;
+import me.consenta.android.consentame.model.TermsAndConditions;
 import me.consenta.android.consentame.model.UserChoice;
 import me.consenta.android.consentame.utils.Constants;
 import me.consenta.android.consentame.utils.UIMapper;
@@ -79,8 +80,8 @@ public class ConsentDetailsActivity extends AppCompatActivity {
         ObjectMapper mapper = new ObjectMapper();
         Intent intent = getIntent();
         String consentJson = intent.getStringExtra("me.consenta.android.consent-json");
-        LinkedList<String> acceptedPurposes = getPurposes(
-                intent.getStringArrayListExtra("me.consenta.android.purposes")
+        LinkedList<Integer> acceptedPurposes = getPurposes(
+                intent.getIntegerArrayListExtra("me.consenta.android.purposes")
         );
 
         // set execution mode
@@ -98,15 +99,20 @@ public class ConsentDetailsActivity extends AppCompatActivity {
         try {
             // try to write data to a Consent object
             consent = mapper.readValue(consentJson, Consent.class);
+            if (consent.getAdditionalProperties().containsKey("detail")) {
+                ConsentaMeCheckButton.releaseCurrent();
+                throw new IOException((String) consent.getAdditionalProperties().get("detail"));
+            }
 
             // save checked purposes in consent
             if (mode == Mode.UPDATE) {
-                if (acceptedPurposes.contains(TERMS_AND_CONDITIONS)) {
+//                if (acceptedPurposes.contains(TERMS_AND_CONDITIONS)) {
+                if (acceptedPurposes.contains(TermsAndConditions.ID)) {
                     consent.getTermsAndConditions().setChecked(true);
                 }
 
                 for (Purpose p : consent.getPurposes()) {
-                    String purposeID = p.getInternalId();
+                    int purposeID = p.getId();
                     if (acceptedPurposes.contains(purposeID)) {
                         p.getAdditionalProperties().put("accepted", true);
                     }
@@ -129,7 +135,7 @@ public class ConsentDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private LinkedList<String> getPurposes(ArrayList<String> purposes) {
+    private LinkedList<Integer> getPurposes(ArrayList<Integer> purposes) {
         if (purposes == null) {
             return null;
         }
@@ -220,6 +226,7 @@ public class ConsentDetailsActivity extends AppCompatActivity {
                         }
                         i.putExtra("me.consenta.android.id", userConsentId);
 
+                        current = thisConsentDetailsActivity;
                         startActivity(i);
 
                         System.out.println("*UPDATE CONSENT*"); // TODO remove
@@ -272,7 +279,7 @@ public class ConsentDetailsActivity extends AppCompatActivity {
         }
     }
 
-    public static void addChoice(final View v, final int id, final boolean mandatory, final boolean selected) {
+    public static void addChoice(final View v, final int id, String name, final boolean mandatory, final boolean selected) {
         final SwitchCompat sel = v.findViewById(R.id.selector);
         sel.setChecked(selected);
 
@@ -297,7 +304,7 @@ public class ConsentDetailsActivity extends AppCompatActivity {
             }
         });
 
-        userChoices.put("" + id, new UserChoice(sel, id, mandatory));
+        userChoices.put(name, new UserChoice(sel, id, name, mandatory));
     }
 
     public static SwitchCompat parseUserChoices() {
