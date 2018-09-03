@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="p_user_data"
+                android:text="purpose_dataset"
                 android:textSize="12.5dp"
                 android:textColor="@color/main_light"/>
 
@@ -96,7 +96,7 @@
                 android:id="@+id/p_short_desc_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="short_desc_2"
+                android:text="short_desc"
                 android:textColor="@color/main_light"/>
 
             <TextView

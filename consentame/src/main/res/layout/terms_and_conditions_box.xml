@@ -10,7 +10,6 @@
         android:layout_marginStart="5dp"
         android:layout_marginEnd="@dimen/box_right_margin"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -28,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tec_desc"
-            android:text="Chino.io Terms and Conditions"
+            android:text="@string/tec_accept"
             android:textColor="@color/consenta_grey" />
 
         <android.support.v7.widget.SwitchCompat

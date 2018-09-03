@@ -5,9 +5,12 @@
     <string name="text_when_dropdown_toggle_closed">View More</string>
     <string name="text_when_dropdown_toggle_open">Hide</string>
     <string name="consent_submit_btn_text">Submit</string>
-    <string name="complete_version_link_text">complete version</string>
+    <string name="complete_version_link_text"><u>complete version</u></string>
     <string name="mandatory_check_text">MANDATORY  </string>
     <string name="consent_back_btn_text">Back</string>
     <string name="consent_update_btn_text">Update</string>
     <string name="success_toast_msg">Success!</string>
+    <string name="terms_and_conditions_box_text">Terms and Conditions</string>
+    <string name="data_administrators_box_text">Data Administrators</string>
+    <string name="privacy_policy_box_text">Privacy Policy</string>
 </resources>

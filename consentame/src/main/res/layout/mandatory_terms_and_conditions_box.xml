@@ -5,12 +5,11 @@
     android:layout_marginBottom="15dp">
 
     <RelativeLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/box_left_margin"
         android:layout_marginEnd="@dimen/box_right_margin"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -18,8 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/selector"
-            android:layout_marginTop="30dp"
-            android:text="title"
+            android:text="@string/tec_accept"
             android:textColor="@color/main_dark"
             android:textSize="@dimen/text_big"
             android:textStyle="bold" />
