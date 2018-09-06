@@ -1,13 +1,14 @@
 package me.consenta.android.consentame.activity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -30,6 +31,7 @@ import me.consenta.android.consentame.utils.Constants;
 import me.consenta.android.consentame.utils.UIMapper;
 
 public class ConsentDetailsActivity extends AppCompatActivity {
+
     /**
      * Execution mode of this {@link ConsentDetailsActivity}
      */
@@ -252,16 +254,6 @@ public class ConsentDetailsActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-    }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-    }
-
     public static String getErrorMessage() {
         if (unreadErrors)
             return exitMsg;
@@ -283,20 +275,19 @@ public class ConsentDetailsActivity extends AppCompatActivity {
         final SwitchCompat sel = v.findViewById(R.id.selector);
         sel.setChecked(selected);
 
-
-        sel.setOnClickListener(new View.OnClickListener() {
+        sel.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View clickedView) {
+            public void onCheckedChanged(CompoundButton changedView, boolean isChecked) {
                 if (mandatory) {
                     // Hide "MANDATORY" text when clicked. Text is displayed by
                     // setShowText(true), called inside OnClickListener of the submitBtn
-                    if (clickedView == sel) {
+                    if (changedView == sel) {
                         sel.setText("");
                         sel.invalidate();
                     }
                 }
 
-                // set confirmation button text to "UPDATE"
+                // set confirmation button text to "UPDATE" and activate restrictive clauses switch
                 if (mode == Mode.UPDATE) {
                     Button submitBtn = v.getRootView().findViewById(R.id.check_and_submit);
                     submitBtn.setText(R.string.consent_update_btn_text);
@@ -305,6 +296,31 @@ public class ConsentDetailsActivity extends AppCompatActivity {
         });
 
         userChoices.put(name, new UserChoice(sel, id, name, mandatory));
+    }
+
+    public static void addRestrictive(final RelativeLayout v) {
+        final SwitchCompat restrictive = v.findViewById(R.id.restrictive_selector);
+        // if the consent was accepted, the clauses MUST have been checked
+        restrictive.setChecked(mode == Mode.UPDATE);
+
+        restrictive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton changedView, boolean isChecked) {
+                // Hide "MANDATORY" text when clicked. Text is displayed by
+                // setShowText(true), called inside OnClickListener of the submitBtn
+                if (changedView == restrictive) {
+                    restrictive.setText("");
+                    restrictive.invalidate();
+                }
+                // set confirmation button text to "UPDATE" and activate restrictive clauses switch
+                if (mode == Mode.UPDATE) {
+                    Button submitBtn = v.getRootView().findViewById(R.id.check_and_submit);
+                    submitBtn.setText(R.string.consent_update_btn_text);
+                }
+            }
+        });
+
+        userChoices.put("restrictive", new UserChoice(restrictive, TermsAndConditions.RESTRICTIVE_ID, "restrictive", true));
     }
 
     public static SwitchCompat parseUserChoices() {
@@ -339,5 +355,11 @@ public class ConsentDetailsActivity extends AppCompatActivity {
         consent = null;
         mode = null;
         finish();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mapToUI();
     }
 }

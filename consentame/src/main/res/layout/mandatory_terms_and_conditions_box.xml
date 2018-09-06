@@ -17,27 +17,69 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/selector"
-            android:text="@string/tec_accept"
+            android:text="@string/tec_section_title"
             android:textColor="@color/main_dark"
             android:textSize="@dimen/text_big"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tec_title"
+        <RelativeLayout
+            android:id="@+id/selector_box"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tec_desc"
-            android:text="@string/tec_accept"
-            android:textColor="@color/consenta_grey" />
+            android:layout_below="@+id/tec_desc" >
 
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/selector"
+            <TextView
+                android:id="@+id/tec_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/tec_accept"
+                android:textColor="@color/consenta_grey" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/selector"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text=""
+                android:theme="@style/Theme.ConsentaSwitchMandatory" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/restrictive_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/selector_box">
+
+            <TextView
+                android:id="@+id/restrictive_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/restrictive_accept"
+                android:textColor="@color/main_light" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/restrictive_selector"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text=""
+                android:theme="@style/Theme.ConsentaSwitchMandatory" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/restrictive_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
-            android:text=""
-            android:theme="@style/Theme.ConsentaSwitchMandatory"/>
+            android:layout_marginStart="@dimen/double_margin"
+            android:layout_marginEnd="@dimen/double_margin"
+            android:text="Restrictive clauses must be accepted explicitly by the user, in compliance with italian law. They are always mandatory."
+            android:layout_below="@+id/restrictive_box"/>
+
     </RelativeLayout>
 </RelativeLayout>

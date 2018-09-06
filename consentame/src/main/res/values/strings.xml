@@ -1,16 +1,19 @@
 <resources>
     <string name="consenta_btn_text">I acccept your terms &amp; conditions</string>
     <string name="consenta_me_link">Consent Management by <a href="https://consenta.me">CONSENTA.ME</a></string>
+    <string name="tec_section_title">Terms &amp; Conditions</string>
     <string name="tec_accept">I accept your Terms &amp; Conditions</string>
     <string name="text_when_dropdown_toggle_closed">View More</string>
     <string name="text_when_dropdown_toggle_open">Hide</string>
-    <string name="consent_submit_btn_text">Submit</string>
+    <string name="consent_submit_btn_text">I consent</string>
     <string name="complete_version_link_text"><u>complete version</u></string>
     <string name="mandatory_check_text">MANDATORY  </string>
     <string name="consent_back_btn_text">Back</string>
-    <string name="consent_update_btn_text">Update</string>
+    <string name="consent_update_btn_text">I consent</string>
     <string name="success_toast_msg">Success!</string>
     <string name="terms_and_conditions_box_text">Terms and Conditions</string>
     <string name="data_administrators_box_text">Data Administrators</string>
     <string name="privacy_policy_box_text">Privacy Policy</string>
+    <string name="copy_error_msg_instructions">DEV: If you can\'t solve the error, please long press on the error message to copy it, then send it to a developer.</string>
+    <string name="restrictive_accept">I accept all the restrictive clauses</string>
 </resources>

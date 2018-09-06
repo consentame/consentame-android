@@ -88,16 +88,27 @@ public class UIMapper {
             }
         });
 
-        // get instance of the LinearLayout which contains the T&C
+        // get
         LinearLayout tecContainer = container.findViewById(R.id.tec_container);
         tecContainer.removeAllViews();
 
         RelativeLayout tecBox = (RelativeLayout) RelativeLayout.inflate(container.getContext(), layoutId, null);
-//        RelativeLayout tecBox = (RelativeLayout) tecContainer.inflate(container.getContext(), layoutId, null);
         TextView desc = tecBox.findViewById(R.id.tec_desc);
         desc.setText(source.getTitle());
 
+        // get the TextView that contains the restrictive clauses text
+        TextView restrictiveClausesText = tecBox.findViewById(R.id.restrictive_text);
+        String restrictive = source.getRestrictiveText();
+        restrictiveClausesText.setText(restrictive);
+        if (restrictive.isEmpty()) {
+            restrictiveClausesText.setVisibility(View.GONE);
+        } else {
+            restrictiveClausesText.setVisibility(View.VISIBLE);
+        }
+
+
         ConsentDetailsActivity.addChoice(tecBox, TermsAndConditions.ID, "tec", source.isMandatory(), source.isChecked());
+        ConsentDetailsActivity.addRestrictive(tecBox);
         append(tecBox, tecContainer);
         container.invalidate();
     }

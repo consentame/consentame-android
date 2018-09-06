@@ -70,7 +70,6 @@ public final class ConsentaMeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consenta_me);
 
-
         ERR_COLOR = getResources().getColor(R.color.error_red);
         MSG_COLOR = getResources().getColor(R.color.main_light);
 
@@ -134,13 +133,17 @@ public final class ConsentaMeActivity extends AppCompatActivity {
             return;
         }
 
+        console.setText(text);
+        TextView errorInstructions = findViewById(R.id.copy_error_msg_instructions);
+
         if (error) {
             console.setTextColor(ERR_COLOR);
+            if (DEV)
+                errorInstructions.setVisibility(View.VISIBLE);
         } else {
             console.setTextColor(MSG_COLOR);
+            errorInstructions.setVisibility(View.GONE);
         }
-
-        console.setText(text);
     }
 
     /**
@@ -190,12 +193,17 @@ public final class ConsentaMeActivity extends AppCompatActivity {
             }
             String consentId = strings[0];
             String ucID = strings[1];
+
             // API call to Consenta.me to fetch consent details
             String apiUrl;
             Response resp;
             try {
+                if (ucID != null && token == null) {
+                    throw new IOException("Access token required");
+                }
+
                 // Read Consent
-                apiUrl = Constants.HOST + "/api/consent/" + consentId;
+                apiUrl = Constants.HOST + "/api/consent/" + consentId + "/";
                 Request readConsent = new Request.Builder()
                         .get()
                         .url(apiUrl)
@@ -211,12 +219,11 @@ public final class ConsentaMeActivity extends AppCompatActivity {
 
                 if (ucID != null) {
                     // Fetch UserConsent
-                    apiUrl = Constants.HOST + "/api/userconsent/" + ucID;
+                    apiUrl = Constants.HOST + "/api/userconsent/" + ucID + "/?access_token=" + token;
 
                     Request readPurposes = new Request.Builder()
                             .get()
                             .url(apiUrl)
-                            .addHeader("Authorization", "Bearer " + token)
                             .build();
                     // call API
                     try {

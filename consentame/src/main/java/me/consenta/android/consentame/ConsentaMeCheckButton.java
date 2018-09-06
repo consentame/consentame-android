@@ -48,9 +48,9 @@ public final class ConsentaMeCheckButton extends LinearLayout {
             if (DEV)
                 HOST = DEV_HOST;
 
-            Logger.getLogger(getClass().getSimpleName()).info("correctly set consentId");
+            setupOnClick(context);
 
-            super.setOnClickListener(new ConsentaMeOnClickListener(context, this));
+            Logger.getLogger(getClass().getSimpleName()).info("setup complete");
         } finally {
             a.recycle();
         }
@@ -60,6 +60,10 @@ public final class ConsentaMeCheckButton extends LinearLayout {
         ImageSwitcher checkboxes = findViewById(R.id.checkboxes);
         checkboxes.setImageResource(R.drawable.ic_square);
         checked = false;
+    }
+
+    private void setupOnClick(Context context) {
+        super.setOnClickListener(new ConsentaMeOnClickListener(context, this));
     }
 
     /**

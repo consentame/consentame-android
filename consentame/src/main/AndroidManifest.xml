@@ -6,7 +6,8 @@
 
     <application>
         <activity android:name=".activity.ConsentaMeActivity" />
-        <activity android:name=".activity.ConsentDetailsActivity" />
+        <activity android:name=".activity.ConsentDetailsActivity"
+            android:configChanges="orientation"/>
         <activity android:name=".activity.SubmitConsentActivity" />
         <activity android:name=".activity.UpdateConsentActivity" />
     </application>

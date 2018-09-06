@@ -28,5 +28,5 @@ public class Constants {
      */
     public final static String DEV_HOST = "https://dev.consenta.me";
 
-    public final static String TEST_HOST = "http://3e5bcdec.ngrok.io";
+    public final static String TEST_HOST = "http://eb339f07.ngrok.io";
 }

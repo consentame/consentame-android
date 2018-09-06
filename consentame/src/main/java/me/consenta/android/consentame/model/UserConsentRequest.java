@@ -57,6 +57,8 @@ public class UserConsentRequest implements Serializable
             if (choice.getId() == TermsAndConditions.ID) {
                 // this is a TermsAndConditions; save status
                 tec = choice.getSwitch().isChecked();
+            } else if (choice.getId() == TermsAndConditions.RESTRICTIVE_ID) {
+
             } else {
                 // this is a Purpose; append ID to list (only if selected)
                 choice.ifSelectedAppendTo(accepted);

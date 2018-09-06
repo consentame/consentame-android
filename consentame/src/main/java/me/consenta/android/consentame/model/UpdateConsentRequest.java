@@ -22,7 +22,7 @@ public class UpdateConsentRequest extends UserConsentRequest {
 
     public UpdateConsentRequest(String userConsentId, String accessToken, List<UserChoice> choiceList) {
         super(userConsentId, choiceList);
-        apiUrl = Constants.HOST + "/api/userconsent/" + userConsentId + "/";
+        apiUrl = Constants.HOST + "/api/userconsent/" + userConsentId + "/?access_token=" + accessToken;
     }
 
     @Override
