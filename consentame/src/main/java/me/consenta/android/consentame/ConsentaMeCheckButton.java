@@ -29,6 +29,7 @@ public final class ConsentaMeCheckButton extends LinearLayout {
     private static ConsentaMeCheckButton currentButton = null;
     private String consentId;
     private boolean checked;
+    private OnUserConsentListener listener = null;
 
     // update operation
     private String userConsentId;
@@ -64,6 +65,10 @@ public final class ConsentaMeCheckButton extends LinearLayout {
 
     private void setupOnClick(Context context) {
         super.setOnClickListener(new ConsentaMeOnClickListener(context, this));
+    }
+
+    void setListener(OnUserConsentListener listener) {
+        this.listener = listener;
     }
 
     /**
@@ -193,6 +198,9 @@ public final class ConsentaMeCheckButton extends LinearLayout {
             // otherwise the old one will be fetched and updated.
             intent.putExtra("me.consenta.android.user_consent_id", btnHandler.getUserConsentId());
             intent.putExtra("me.consenta.android.consent_update_token", updateAccessToken);
+            intent.putExtra("me.consenta.android.listener",
+                    ConsentaMeActivity.registerListener(listener)
+            );
             currentButton = thisBtn;
             context.startActivity(intent);
         }

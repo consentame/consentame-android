@@ -31,7 +31,7 @@ class UpdateConsentTask extends SubmitConsentTask {
         caller.loading.setVisibility(View.GONE);
         Toast.makeText(caller.getApplicationContext(), R.string.success_toast_msg, Toast.LENGTH_SHORT)
                 .show();
-        caller.notifySuccess();
+        caller.notifySuccess(payload);
         if (success) {
             ConsentaMeCheckButton.releaseCurrent();
             caller.setConsoleText("Success!", false);

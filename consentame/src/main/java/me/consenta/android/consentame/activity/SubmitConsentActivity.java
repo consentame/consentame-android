@@ -83,9 +83,10 @@ public class SubmitConsentActivity extends AppCompatActivity {
     /**
      * Notify this activity that the submit async task has been finished correctly.
      *
+     * @param userConsentId
      */
-    void notifySuccess() {
-        ConsentDetailsActivity.getCurrent().notifySuccess(this);
+    void notifySuccess(String userConsentId) {
+        ConsentDetailsActivity.getCurrent().notifySuccess(this, userConsentId);
     }
 
     public static Class<? extends SubmitConsentActivity> initClass(Collection<UserChoice> userChoicesList) {

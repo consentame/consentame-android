@@ -55,7 +55,7 @@ public final class ConsentaMe {
      * @param temporaryToken the token that can be used to fetch / update the consent.
      *                       It must be requested to the app's backend, which can obtain one with
      *                       an API call to Consenta.me
-     * @param userConsentId
+     * @param userConsentId the ID of the UserConsent, returned after the user
      */
     public void init(String temporaryToken, String userConsentId) {
         if (userConsentId != null) {
@@ -81,6 +81,10 @@ public final class ConsentaMe {
             throw new IllegalStateException("This consent has not been accepted yet!");
         button.setAccessToken(temporaryToken);
         button.invalidate();
+    }
+
+    public void setOnUserConsentListener(OnUserConsentListener onUserConsent) {
+        button.setListener(onUserConsent);
     }
 
     /**

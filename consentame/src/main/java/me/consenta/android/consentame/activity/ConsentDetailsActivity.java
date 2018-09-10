@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import me.consenta.android.consentame.ConsentaMeCheckButton;
+import me.consenta.android.consentame.OnUserConsentListener;
 import me.consenta.android.consentame.R;
 import me.consenta.android.consentame.model.Consent;
 import me.consenta.android.consentame.model.Purpose;
@@ -52,6 +53,7 @@ public class ConsentDetailsActivity extends AppCompatActivity {
     private static Consent consent = null;
     private static Mode mode = null;
     private boolean isMapped = false;
+    private OnUserConsentListener afterListener = null;
 
     // params for UPDATE
     private String userConsentId = null;
@@ -70,8 +72,14 @@ public class ConsentDetailsActivity extends AppCompatActivity {
         userChoices = new HashMap<>();
 
         // params for UPDATE
-        userConsentId = getIntent().getStringExtra("me.consenta.android.user-consent-id");
-        temporaryAccessToken = getIntent().getStringExtra("me.consenta.android.token");
+        Intent intent = getIntent();
+        userConsentId = intent.getStringExtra("me.consenta.android.user-consent-id");
+        temporaryAccessToken = intent.getStringExtra("me.consenta.android.token");
+
+        // get OnUserConsentListener to be executed after
+        afterListener = ConsentaMeActivity.getListener(
+                intent.getStringExtra("me.consenta.android.listener")
+        );
 
         unreadErrors = false;
 
@@ -80,7 +88,6 @@ public class ConsentDetailsActivity extends AppCompatActivity {
             return;
         }
         ObjectMapper mapper = new ObjectMapper();
-        Intent intent = getIntent();
         String consentJson = intent.getStringExtra("me.consenta.android.consent-json");
         LinkedList<Integer> acceptedPurposes = getPurposes(
                 intent.getIntegerArrayListExtra("me.consenta.android.purposes")
@@ -342,18 +349,23 @@ public class ConsentDetailsActivity extends AppCompatActivity {
 
     /**
      * Notify this Activity of successful submit.
+     * This method will execute the associated {@link OnUserConsentListener
      * It is invoked by {@link SubmitConsentActivity} after a successful Consent submission.
      *
      * @param notificator the {@link SubmitConsentActivity} which ended successfully.
      */
-    public void notifySuccess(final SubmitConsentActivity notificator) {
+    public void notifySuccess(final SubmitConsentActivity notificator, String userConsentId) {
         if (notificator == null) {throw new IllegalArgumentException("Invalid notifier.");}
-        notifySuccess();
+        notifySuccess(userConsentId);
     }
 
-    private void notifySuccess() {
+    private void notifySuccess(String userConsentId) {
         consent = null;
         mode = null;
+
+        if (afterListener != null)
+            afterListener.handle(userConsentId);
+
         finish();
     }
 

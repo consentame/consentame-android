@@ -30,7 +30,7 @@ class SubmitConsentTask extends AsyncTask<Void, Void, Boolean> {
 
     private UserConsentRequest request;
 
-    private String payload = "no payload";
+    protected String payload = "no payload";
 
     protected SubmitConsentActivity caller;
 
@@ -118,7 +118,6 @@ class SubmitConsentTask extends AsyncTask<Void, Void, Boolean> {
         caller.loading.setVisibility(View.GONE);
         Toast.makeText(caller.getApplicationContext(), R.string.success_toast_msg, Toast.LENGTH_SHORT)
                 .show();
-        caller.notifySuccess();
         if (success) {
             ConsentaMeCheckButton.setCurrentButtonChecked(payload);
             ConsentaMeCheckButton.releaseCurrent();
@@ -133,6 +132,7 @@ class SubmitConsentTask extends AsyncTask<Void, Void, Boolean> {
                     caller.finish();
                 }
             });
+            caller.notifySuccess(payload);
             caller.action.setVisibility(View.VISIBLE);
         } else {
             showError();

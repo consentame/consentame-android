@@ -23,10 +23,12 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import me.consenta.android.consentame.ConsentaMeCheckButton;
+import me.consenta.android.consentame.OnUserConsentListener;
 import me.consenta.android.consentame.R;
 import me.consenta.android.consentame.model.Consent;
 import me.consenta.android.consentame.model.Purpose;
@@ -51,16 +53,20 @@ public final class ConsentaMeActivity extends AppCompatActivity {
     ProgressBar loading;
     Button retry;
 
+    static HashMap<String, OnUserConsentListener> listeners;
     static int ERR_COLOR, MSG_COLOR;
 
     private String consentId = null,
                     userConsentId = null;
-
     private String token = null;
+    private String listenerId = null;
 
     public static Class<ConsentaMeActivity> setUpClass() {
         if (ConsentaMeCheckButton.getCurrentInstance() != null) {
             throw new ConcurrentModificationException("You may have only one instance of ConsentaMeActivity running at any time.");
+        }
+        if (listeners == null) {
+            listeners = new HashMap<>();
         }
         return ConsentaMeActivity.class;
     }
@@ -91,6 +97,7 @@ public final class ConsentaMeActivity extends AppCompatActivity {
         });
 
         consentId = getIntent().getStringExtra("me.consenta.android.id");
+        listenerId = getIntent().getStringExtra("me.consenta.android.listener");
 
         // parameters for update operation - on creation of a new Consent these params are 'null'
         userConsentId = getIntent().getStringExtra("me.consenta.android.user_consent_id");
@@ -158,6 +165,55 @@ public final class ConsentaMeActivity extends AppCompatActivity {
     public void onBackPressed() {
         ConsentaMeCheckButton.releaseCurrent();
         super.onBackPressed();
+    }
+
+    /**
+     * Return the {@link OnUserConsentListener} associated with the provided key
+     *
+     * @param key the UUID of a {@link OnUserConsentListener}
+     *                   (set by {@link FetchConsentTask#onPostExecute(HashMap)
+     *                   FetchConsentTask.onPostExecute} when calling a new
+     *                   {@link ConsentDetailsActivity}).
+     *
+     * @return the {@link OnUserConsentListener} that matches the provided key, or {@code null} if
+     * no such listener is found.
+     */
+    public static OnUserConsentListener getListener(String key) {
+        if (! listeners.containsKey(key))
+            return null;
+        return listeners.get(key);
+    }
+
+    /**
+     * Remove a {@link OnUserConsentListener} and the relative key
+     *
+     * @param key the UUID that identifies the listener
+     *
+     * @return {@code true} if the listener was successfully removed, otherwise {@code false}
+     */
+    boolean removeListener(String key) {
+        if (! listeners.containsKey(key))
+            return false;
+
+        listeners.remove(key);
+        return true;
+    }
+
+    /**
+     * Register a new {@link OnUserConsentListener} and bind it to a UUID
+     *
+     * @param listener the listener to be added to the list.
+     * @return
+     */
+    public static String registerListener(OnUserConsentListener listener) {
+        String listenerId;
+        do {
+            listenerId = UUID.randomUUID().toString();
+        } while (listeners.containsKey(listenerId));
+
+        listeners.put(listenerId, listener);
+
+        return listenerId;
     }
 
     /**
@@ -324,6 +380,8 @@ public final class ConsentaMeActivity extends AppCompatActivity {
                 Intent intent = new Intent(ConsentaMeActivity.this, ConsentDetailsActivity.class);
                 intent.putExtra("me.consenta.android.consent-json", (String) returnValues.get("consent"));
                 intent.putExtra("me.consenta.android.purposes", purposes);
+
+                intent.putExtra("me.consenta.android.listener", listenerId);
 
                 // parameters for Update operation - on creation, these values are null
                 intent.putExtra("me.consenta.android.user-consent-id", userConsentId);
