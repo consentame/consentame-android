@@ -83,6 +83,14 @@ public final class ConsentaMe {
         button.invalidate();
     }
 
+    /**
+     * Set the {@link OnUserConsentListener} that will be executed EVERY TIME that a user confirms
+     * the consent.
+     *
+     * @param onUserConsent the implementation of {@link OnUserConsentListener} that will be added
+     *                      to the linked {@link ConsentaMeCheckButton}. If {@code null}, the
+     *                      existing listener will be removed.
+     */
     public void setOnUserConsentListener(OnUserConsentListener onUserConsent) {
         button.setListener(onUserConsent);
     }

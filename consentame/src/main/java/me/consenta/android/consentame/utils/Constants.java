@@ -29,4 +29,15 @@ public class Constants {
     public final static String DEV_HOST = "https://dev.consenta.me";
 
     public final static String TEST_HOST = "http://eb339f07.ngrok.io";
+
+    // Constant values used to pass values between activities
+    public static final class a7f681dac288 {
+        public static final String
+                c1a85f46bfa4 = "me.consenta.android.id",                        // ID
+                b6659757401e = "me.consenta.android.user_consent_id",           // ucID
+                cebafe44a0ba = "me.consenta.android.consent_update_token",      // access token
+                f5f17645526e = "me.consenta.android.listener",                  // ID of OnUserConsentListener
+                dcced0583eb7 = "me.consenta.android.consent-json",              // Consent
+                ee2c0c648253 = "me.consenta.android.purposes";                  // list of purposes
+    }
 }

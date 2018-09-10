@@ -31,6 +31,13 @@ import me.consenta.android.consentame.model.UserChoice;
 import me.consenta.android.consentame.utils.Constants;
 import me.consenta.android.consentame.utils.UIMapper;
 
+import static me.consenta.android.consentame.utils.Constants.a7f681dac288.b6659757401e;
+import static me.consenta.android.consentame.utils.Constants.a7f681dac288.c1a85f46bfa4;
+import static me.consenta.android.consentame.utils.Constants.a7f681dac288.cebafe44a0ba;
+import static me.consenta.android.consentame.utils.Constants.a7f681dac288.dcced0583eb7;
+import static me.consenta.android.consentame.utils.Constants.a7f681dac288.ee2c0c648253;
+import static me.consenta.android.consentame.utils.Constants.a7f681dac288.f5f17645526e;
+
 public class ConsentDetailsActivity extends AppCompatActivity {
 
     /**
@@ -73,12 +80,12 @@ public class ConsentDetailsActivity extends AppCompatActivity {
 
         // params for UPDATE
         Intent intent = getIntent();
-        userConsentId = intent.getStringExtra("me.consenta.android.user-consent-id");
-        temporaryAccessToken = intent.getStringExtra("me.consenta.android.token");
+        userConsentId = intent.getStringExtra(b6659757401e);
+        temporaryAccessToken = intent.getStringExtra(cebafe44a0ba);
 
         // get OnUserConsentListener to be executed after
         afterListener = ConsentaMeActivity.getListener(
-                intent.getStringExtra("me.consenta.android.listener")
+                intent.getStringExtra(f5f17645526e)
         );
 
         unreadErrors = false;
@@ -88,9 +95,9 @@ public class ConsentDetailsActivity extends AppCompatActivity {
             return;
         }
         ObjectMapper mapper = new ObjectMapper();
-        String consentJson = intent.getStringExtra("me.consenta.android.consent-json");
+        String consentJson = intent.getStringExtra(dcced0583eb7);
         LinkedList<Integer> acceptedPurposes = getPurposes(
-                intent.getIntegerArrayListExtra("me.consenta.android.purposes")
+                intent.getIntegerArrayListExtra(ee2c0c648253)
         );
 
         // set execution mode
@@ -216,7 +223,7 @@ public class ConsentDetailsActivity extends AppCompatActivity {
                 if (mode == Mode.CREATE) {
                     // OK, send consent and call ConsentaMeCheckButton.check()
                     Intent i = new Intent(v.getContext(), SubmitConsentActivity.initClass(userChoices.values()));
-                    i.putExtra("me.consenta.android.id", consent.getConsentId());
+                    i.putExtra(c1a85f46bfa4, consent.getConsentId());
                     current = thisConsentDetailsActivity;
                     startActivity(i);
                 } else if (mode == Mode.UPDATE) {
@@ -233,7 +240,7 @@ public class ConsentDetailsActivity extends AppCompatActivity {
                         if(temporaryAccessToken == null) {
                             throw new IllegalArgumentException("No access token provided");
                         }
-                        i.putExtra("me.consenta.android.id", userConsentId);
+                        i.putExtra(c1a85f46bfa4, userConsentId);
 
                         current = thisConsentDetailsActivity;
                         startActivity(i);

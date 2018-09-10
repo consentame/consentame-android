@@ -14,6 +14,7 @@ import me.consenta.android.consentame.R;
 import me.consenta.android.consentame.model.Consent;
 
 import static me.consenta.android.consentame.utils.Constants.DEV;
+import static me.consenta.android.consentame.utils.Constants.a7f681dac288.dcced0583eb7;
 
 public final class DemoFetchConsentTask extends AsyncTask<Void, Void, String>{
 
@@ -72,7 +73,7 @@ public final class DemoFetchConsentTask extends AsyncTask<Void, Void, String>{
         if (success) {
             caller.setConsoleText(null, false);
             Intent intent = new Intent(caller.getApplicationContext(), ConsentDetailsActivity.class);
-            intent.putExtra("me.consenta.android.consent-json", jsonResponse);
+            intent.putExtra(dcced0583eb7, jsonResponse);
 
             caller.startActivity(intent);
         } else {

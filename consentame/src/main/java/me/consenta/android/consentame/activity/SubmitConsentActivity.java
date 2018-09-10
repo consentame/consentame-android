@@ -21,6 +21,8 @@ import me.consenta.android.consentame.model.UserChoice;
 import me.consenta.android.consentame.model.UserConsentRequest;
 import me.consenta.android.consentame.utils.Constants;
 
+import static me.consenta.android.consentame.utils.Constants.a7f681dac288.c1a85f46bfa4;
+
 public class SubmitConsentActivity extends AppCompatActivity {
 
     protected static String consentId;
@@ -37,7 +39,7 @@ public class SubmitConsentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit);
 
-        consentId = getIntent().getStringExtra("me.consenta.android.id");
+        consentId = getIntent().getStringExtra(c1a85f46bfa4);
 
         console = findViewById(R.id.loading_console);
         console.setOnLongClickListener(new View.OnLongClickListener() {

@@ -1,7 +1,9 @@
 package me.consenta.android.consentame;
 
+import android.support.annotation.Keep;
 import android.support.annotation.Nullable;
 
+@Keep
 public interface OnUserConsentListener {
 
     /**

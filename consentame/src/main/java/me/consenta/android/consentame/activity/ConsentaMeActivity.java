@@ -40,6 +40,12 @@ import okhttp3.Response;
 
 import static me.consenta.android.consentame.utils.Constants.DEMO;
 import static me.consenta.android.consentame.utils.Constants.DEV;
+import static me.consenta.android.consentame.utils.Constants.a7f681dac288.b6659757401e;
+import static me.consenta.android.consentame.utils.Constants.a7f681dac288.c1a85f46bfa4;
+import static me.consenta.android.consentame.utils.Constants.a7f681dac288.cebafe44a0ba;
+import static me.consenta.android.consentame.utils.Constants.a7f681dac288.dcced0583eb7;
+import static me.consenta.android.consentame.utils.Constants.a7f681dac288.ee2c0c648253;
+import static me.consenta.android.consentame.utils.Constants.a7f681dac288.f5f17645526e;
 
 /**
  * Performs calls to Consenta.me to retrieve a Consent object.
@@ -96,12 +102,12 @@ public final class ConsentaMeActivity extends AppCompatActivity {
             }
         });
 
-        consentId = getIntent().getStringExtra("me.consenta.android.id");
-        listenerId = getIntent().getStringExtra("me.consenta.android.listener");
+        consentId = getIntent().getStringExtra(c1a85f46bfa4);
+        listenerId = getIntent().getStringExtra(f5f17645526e);
 
         // parameters for update operation - on creation of a new Consent these params are 'null'
-        userConsentId = getIntent().getStringExtra("me.consenta.android.user_consent_id");
-        token = getIntent().getStringExtra("me.consenta.android.consent_update_token");
+        userConsentId = getIntent().getStringExtra(b6659757401e);
+        token = getIntent().getStringExtra(cebafe44a0ba);
 
         final ConsentaMeActivity thisConsentaMeActivity = this;
         retry.setOnClickListener(new View.OnClickListener() {
@@ -378,14 +384,14 @@ public final class ConsentaMeActivity extends AppCompatActivity {
                 // show Consent details
                 setConsoleText(null, false);
                 Intent intent = new Intent(ConsentaMeActivity.this, ConsentDetailsActivity.class);
-                intent.putExtra("me.consenta.android.consent-json", (String) returnValues.get("consent"));
-                intent.putExtra("me.consenta.android.purposes", purposes);
+                intent.putExtra(dcced0583eb7, (String) returnValues.get("consent"));
+                intent.putExtra(ee2c0c648253, purposes);
 
-                intent.putExtra("me.consenta.android.listener", listenerId);
+                intent.putExtra(f5f17645526e, listenerId);
 
                 // parameters for Update operation - on creation, these values are null
-                intent.putExtra("me.consenta.android.user-consent-id", userConsentId);
-                intent.putExtra("me.consenta.android.token", token);
+                intent.putExtra(b6659757401e, userConsentId);
+                intent.putExtra(cebafe44a0ba, token);
 
                 notifySuccess(); // finish ConsentaMeActivity
                 startActivity(intent); // start ConsentDetailsActivity

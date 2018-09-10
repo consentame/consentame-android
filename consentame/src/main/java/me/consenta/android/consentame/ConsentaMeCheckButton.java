@@ -18,11 +18,14 @@ import me.consenta.android.consentame.activity.ConsentaMeActivity;
 import static me.consenta.android.consentame.utils.Constants.DEV;
 import static me.consenta.android.consentame.utils.Constants.DEV_HOST;
 import static me.consenta.android.consentame.utils.Constants.HOST;
+import static me.consenta.android.consentame.utils.Constants.a7f681dac288.b6659757401e;
+import static me.consenta.android.consentame.utils.Constants.a7f681dac288.c1a85f46bfa4;
+import static me.consenta.android.consentame.utils.Constants.a7f681dac288.cebafe44a0ba;
+import static me.consenta.android.consentame.utils.Constants.a7f681dac288.f5f17645526e;
 
 /**
  * Default Consenta.me checkbox
  */
-@Keep
 public final class ConsentaMeCheckButton extends LinearLayout {
 
     // base attributes
@@ -36,6 +39,7 @@ public final class ConsentaMeCheckButton extends LinearLayout {
     private String updateAccessToken = null;
 
 
+    @Keep
     public ConsentaMeCheckButton(final Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -67,6 +71,11 @@ public final class ConsentaMeCheckButton extends LinearLayout {
         super.setOnClickListener(new ConsentaMeOnClickListener(context, this));
     }
 
+    /**
+     * Update this Button's {@link OnUserConsentListener}.
+     *
+     * @param listener the new {@link OnUserConsentListener}
+     */
     void setListener(OnUserConsentListener listener) {
         this.listener = listener;
     }
@@ -74,6 +83,7 @@ public final class ConsentaMeCheckButton extends LinearLayout {
     /**
      * Change the state of the currently running instance of the Button to 'checked'
      */
+    @Keep
     public static void setCurrentButtonChecked(String userConsentId) {
         ImageSwitcher checkBoxImg = currentButton.findViewById(R.id.checkboxes);
         checkBoxImg.setImageResource(R.drawable.ic_check_square);
@@ -118,6 +128,7 @@ public final class ConsentaMeCheckButton extends LinearLayout {
      * @return the instance of {@link ConsentaMeCheckButton} that was selected by the user,
      * or {@code null} if the user has already submitted the Consent.
      */
+    @Keep
     @Nullable
     public static ConsentaMeCheckButton getCurrentInstance() {
         return currentButton;
@@ -126,6 +137,7 @@ public final class ConsentaMeCheckButton extends LinearLayout {
     /**
      *  Reset the static current instance of this class
      */
+    @Keep
     public static void releaseCurrent() {
         currentButton = null;
     }
@@ -137,6 +149,7 @@ public final class ConsentaMeCheckButton extends LinearLayout {
      * @param l will be ignored.
      * @throws UnsupportedOperationException The default OnClickListener for this element cannot be overridden.
      */
+    @Keep
     @Override
     public void setOnClickListener(@Nullable OnClickListener l) {
         throw new UnsupportedOperationException("The default OnClickListener for this element cannot be overridden.");
@@ -193,12 +206,12 @@ public final class ConsentaMeCheckButton extends LinearLayout {
         public void onClick(View v) {
 
             Intent intent = new Intent(context, ConsentaMeActivity.setUpClass());
-            intent.putExtra("me.consenta.android.id", btnHandler.getConsentId());
+            intent.putExtra(c1a85f46bfa4, btnHandler.getConsentId());
             // if 'null', the ConsentaMeActivity will create a new consent,
             // otherwise the old one will be fetched and updated.
-            intent.putExtra("me.consenta.android.user_consent_id", btnHandler.getUserConsentId());
-            intent.putExtra("me.consenta.android.consent_update_token", updateAccessToken);
-            intent.putExtra("me.consenta.android.listener",
+            intent.putExtra(b6659757401e, btnHandler.getUserConsentId());
+            intent.putExtra(cebafe44a0ba, updateAccessToken);
+            intent.putExtra(f5f17645526e,
                     ConsentaMeActivity.registerListener(listener)
             );
             currentButton = thisBtn;
