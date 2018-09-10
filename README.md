@@ -39,7 +39,7 @@ and the dependency:
 ```
 dependencies {
 	// other dependencies . . . 
-	implementation 'com.github.consentame:consentame-android:0.1'
+	implementation 'com.github.consentame:consentame-android:1.0'
 }
 ```
 
@@ -61,6 +61,20 @@ Once the button is set, you can control it with the class `ConsentaMe`, which pr
 ConsentaMe consentaMe = new ConsentaMe(this, R.id.consentame_btn);
 String userConsentId = consentaMe.getUserConsentId();
 ```
+
+***NEW in v 1.0***: As an alternative, you can set up a `OnUserConsentListener` that will be executed after the User Consent ID is received:
+```Java
+ConsentaMe consentaMe = new ConsentaMe(this, R.id.consentame_btn);
+final String userConsentId;
+consentaMe.setOnUserConsentListener(
+    @Override
+        public void handle(String ucID) {
+            userConsentId = ucID;
+        }
+    });
+)
+```
+
 Class `ConsentaMe` provides the following interface:
 
 * `public String getConsentId()`: returns the Consent ID that was set in the `consentId` XML attribute during step 3.
@@ -72,15 +86,35 @@ If the user has not approved the Consent, this will return `null`.
 work like the previous methods, but they get information from the **currently running instance** of the Consent button,
 which exists as long as a User is reading the Consent's details.
 * Finally you can use `public static boolean isRunning()` to check whether there is an active instance.
+* ***NEW in v 1.0*** : You can change the Button's visibility with `visible()`, `invisible()` and `gone()`
 
+### *NEW in v 1.0*: Review and update Consent
+When clicking on a "checked" button, the plugin will show the previously accepted Consent and will give a chance to change the preferences, as long as the mandatory *Purposes* are still accepted.
 
-***Note*** - remember to:
+* In order to **review** a Consent, you must:
+    * retrieve the User Consent ID; if the Button was just clicked the ID is already stored there.
+    Otherwise, you must fetch it from your own backend.
+
+    * set the ID in the button, using the `setButtonChecked(String)` method.
+
+* In order to **update** a Consent, you ALSO must:
+    * Have your backend request an `accessToken` from Consenta.me
+
+    * get the `accessToken` from your backend; the token is temporary and will be invalidated as soon as you complete the update operation.
+
+    * set the `accessToken` with the `init(String)` method. You can set both the User Consent ID AND the `accessToken` with `init(String, String)`.
+
+### Remember!
 
 1. Import the `res-auto` namespace in the root Layout with `xmlns:app="http://schemas.android.com/apk/res-auto"`
 
 2. Paste the Consent ID of the Consent you created on Consenta.me in the attribute `consentId`. This can not be changed (every button must have exactly one Consent ID, but you can have more buttons)
 
-4. Right now only the develop API are supported, thus you should set the attribute `app:dev="true"` for the plugin to work.
+3. Right now only the develop API are supported, thus you should set the attribute `app:dev="true"` for the plugin to work.
+
+4. Any accepted Consent must be confirmed server-side using Consenta.me API. Instructions can be found in the [Consenta.me console](https://dev.consenta.me/console/instructions/browser/)
+
+5. ***Never store the User Consent ID or the Consenta.me API token in the phone!***
 
 ## Button usage guidelines
 
